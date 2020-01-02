@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache name="shiroCache">
+    <!-- 序列化硬盘的存储目录 -->
+    <!--<diskStore path="d:/ehcache"/>-->
+    <diskStore path="/usr/local/ehcache"/>
+    <!-- 
+    	登录记录缓存 锁定30秒 
+    	maxEntriesLocalHeap 内存缓存对象的个数
+    	eternal设置缓存中对象是否为永久的
+    	timeToIdleSeconds 闲置时间秒
+    	timeToLiveSeconds 生存时间
+    	overflowToDisk 内存不足时，是否启用磁盘缓存
+    	statistics是否收集统计信息
+    -->
+    <defaultCache
+            maxElementsInMemory="10000"
+            maxElementsOnDisk="0"
+            eternal="false"
+            overflowToDisk="true"
+            diskPersistent="false"
+            timeToIdleSeconds="1"
+            timeToLiveSeconds="1"
+            diskSpoolBufferSizeMB="50"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LFU"
+    ></defaultCache>
+
+
+    <cache name="passwordRetryCache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="60"
+           overflowToDisk="true"
+           statistics="false">
+    </cache>
+
+    <cache name="authenticationCache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="false">
+    </cache>
+
+    <cache name="authorizationCache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+    
+</ehcache>
