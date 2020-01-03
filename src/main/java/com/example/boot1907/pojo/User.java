@@ -1,18 +1,40 @@
 package com.example.boot1907.pojo;
 
+import java.util.Date;
 import lombok.Data;
 
-import java.io.Serializable;
-import java.util.Date;
 @Data
-public class User implements Serializable {
-    private Integer userId;
+public class User {
+    private Long userId;
+
     private String userName;
-    private Date brithday;
-    private String gender;
-    private String isadmin;
-    private String filepath;
-    private String passwd;
-    private Integer valid;
+
+    private String userPassword;
+
     private String salt;
+
+    private String userEmail;
+
+    private String userGender;
+
+    private Long userPhone;
+
+    private String isadmin;
+
+    private String userStatus;
+
+    private Integer userEx;
+
+    private Date userTime;
+
+    private String userShow;
+
+    private String userBlog;
+
+    private String userImg;
+
+    private Long userFans;
+
+    private Long userConcern;
+
 }

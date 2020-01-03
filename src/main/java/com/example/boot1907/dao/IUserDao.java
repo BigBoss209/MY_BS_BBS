@@ -34,7 +34,7 @@ public interface IUserDao {
                 if(pojo.getUserName() != null && !"".equals(pojo.getUserName())) {
                     sql.append(" and user_name like %${userName}% ");
                 }
-                if(pojo.getGender() != null && !"".equals(pojo.getGender())) {
+                if(pojo.getUserGender() != null && !"".equals(pojo.getUserGender())) {
                     sql.append(" and gender = #{gender} ");
                 }
             }

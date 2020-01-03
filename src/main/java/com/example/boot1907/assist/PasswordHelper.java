@@ -25,10 +25,10 @@ public class PasswordHelper {
         user.setSalt(randomNumberGenerator.nextBytes().toHex());
         String newPassword = new SimpleHash(
                 algorithmName,
-                user.getPasswd(),
+                user.getUserPassword(),
                 ByteSource.Util.bytes(user.getSalt()),
                 hashIterations).toHex();
 
-        user.setPasswd(newPassword);
+        user.setUserPassword(newPassword);
     }
 }

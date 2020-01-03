@@ -30,13 +30,13 @@ public class UserRealm extends AuthorizingRealm {
         if(dbUser == null) {
             throw new UnknownAccountException();
         }
-        if(dbUser.getValid() == 0) {
+        if("0".equals(dbUser.getUserStatus())) {
             throw new LockedAccountException();
         }
         // 把正确的用户名和密码给到匹配器,当调用subject.login的时候
         // 匹配器会去自动匹配
         return new SimpleAuthenticationInfo(dbUser.getUserName(),
-                dbUser.getPasswd(),
+                dbUser.getUserPassword(),
                 ByteSource.Util.bytes(dbUser.getSalt()),
                 getName());
     }
