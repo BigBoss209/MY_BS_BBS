@@ -165,6 +165,11 @@ public class ShiroConfig {
         map.put("/unauthorized*","anon");
         map.put("/register*","anon");
         map.put("/error*","anon");
+
+        map.put("/index.*","anon");
+        map.put("/**.htm","anon");
+
+
         map.put("/logout","logout");
         map.put("/**","authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
