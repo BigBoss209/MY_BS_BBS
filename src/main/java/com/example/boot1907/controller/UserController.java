@@ -51,7 +51,7 @@ public class UserController {
     public ModelAndView login(User user, HttpServletRequest request) {
         ModelAndView mv = new ModelAndView("login");
         Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(), user.getPasswd());
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(), user.getUserPassword());
         String error = null;
         try {
             subject.login(token);

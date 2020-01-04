@@ -161,17 +161,20 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized.html");
         Map<String,String> map = new HashMap();
         //登出
-        map.put("/login*","anon");
-        map.put("/unauthorized*","anon");
-        map.put("/register*","anon");
-        map.put("/error*","anon");
+//        map.put("/login*","anon");
+//        map.put("/unauthorized*","anon");
+//        map.put("/register*","anon");
+//        map.put("/error*","anon");
+//
+//        map.put("/index.*","anon");
+//        map.put("/**.htm","anon");
+//
+//
+//        map.put("/logout","logout");
+//        map.put("/**","authc");
 
-        map.put("/index.*","anon");
-        map.put("/**.htm","anon");
+        map.put("/**","anon");
 
-
-        map.put("/logout","logout");
-        map.put("/**","authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
 //        Map<String, Filter> filters = new HashMap<>();
 //        FormAuthenticationFilter formAuthenticationFilter = new FormAuthenticationFilter();
