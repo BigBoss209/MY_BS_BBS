@@ -1,0 +1,111 @@
+<style>
+    #foot{
+        background-color: #0099CC;
+        width: 100%;
+    }
+    .usefullink{
+        width: 100%;
+
+    }
+    .linkinfo{
+        width: 100%;
+        height: 22px;
+        line-height: 20px;
+        margin-left: 8px;
+    }
+    .link{
+        width: 100%;
+        height: 30px;
+        border-top:1px solid  #e4e4e4  ;
+        background-color: azure;
+        float: left;
+        margin: auto;
+    }
+    .mylink{
+        display: block;
+        float: left;
+        padding-left: 15px;
+        margin-top: 5px;
+
+    }
+    .mylink a{
+        color: black;
+    }
+    .mylink a:hover{
+        color: silver;
+    }
+</style>
+
+
+<div style="width: 100%;height: 20px; background-color: deepskyblue"></div>
+<div id="foot">
+    <div class="usefullink">
+        <div class="linkinfo">
+            <span style="font-size: 13px;font-weight: bold">友情链接</span>
+        </div>
+        <div class="link">
+            <span class="mylink"><a href="www.renren.com">人人影视</a></span>
+            <span class="mylink"><a href="www.passport.weibo.com">梵境微博</a></span>
+            <span class="mylink"><a href="www.zmz2019.com/resourcelist">我为卿狂字幕组</a></span>
+            <span class="mylink"><a href="https://movie.douban.com/">豆瓣电影</a></span>
+            <span class="mylink"><a href="https://www.zhihu.com">知乎</a></span>
+        </div>
+    </div>
+
+    <div style="width: 100%;height: 36px; background-color: deepskyblue;clear:both"></div>
+    <div style="width: 100%;height: 0px;border: 1px solid #f2d1f2"></div>
+    <div style="width: 100%;height: 20px; background-color: deepskyblue;clear:both"></div>
+    <style>
+        .bottom{
+            width: 100%;
+            height: 30px;
+            background-color: #00bfff;
+            /*background-color: beige;*/
+        }
+        .bottom_div{
+            text-align: center;
+            /*background-color: red;*/
+        }
+        .bottom_div span{
+            margin: 10px;
+        }
+        .bottom_div span a{
+            color:#837482;
+        }
+    </style>
+    <div class="bottom">
+        <div class="bottom_div">
+            <span><a href="">关于本站</a></span>
+            <span><a href="">问题反馈</a></span>
+            <span><a href="https://github.com/BigBoss209">github帮助</a></span>
+        </div>
+        <div style="text-align: center; margin-top: 3px">
+            <p style="display: block;font-size: 10px;color: black;">
+                Powered by <a style="color: black;" href="https://github.com/BigBoss209" target="_blank" rel="nofollow">LiuJinMing</a> ©2019-2020 <a style="color: black;" href="https://github.com/BigBoss209" target="_blank" rel="nofollow">github.com</a> <a href="http://www.miitbeian.gov.cn" target="_blank" rel="nofollow"></a></p>
+        </div>
+    </div>
+</div>
+<div style="width: 100%;height: 20px; background-color: deepskyblue"></div>
+<style>
+    #anchor{
+        display: block;
+        width: 51px;
+        height: 53px;
+        position: fixed;
+        right: 10px;
+        bottom: 35%;
+        background-image: url("/imgs/core_bg.png");
+        background-repeat:repeat;
+        background-position: 140px 1261px;
+    }
+    #anchor:hover{
+        width: 50px;
+        height: 52px;
+    }
+</style>
+<a id="anchor" onclick="anchor_point();"></a>
+<script>
+    var anchor_point = function(){
+        document.getElementById("anchor_point").scrollIntoView();
+    }
+</script>
