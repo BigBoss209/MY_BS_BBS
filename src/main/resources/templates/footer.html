@@ -94,7 +94,7 @@
         position: fixed;
         right: 10px;
         bottom: 35%;
-        background-image: url("/imgs/core_bg.png");
+        background-image: url("/static/imgs/core_bg.png");
         background-repeat:repeat;
         background-position: 140px 1261px;
     }
@@ -105,7 +105,24 @@
 </style>
 <a id="anchor" onclick="anchor_point();"></a>
 <script>
-    var anchor_point = function(){
-        document.getElementById("anchor_point").scrollIntoView();
+    // var anchor_point = function(){
+    //     document.getElementById("anchor_point").scrollIntoView();
+    // }
+    var value;
+    function anchor_point() {
+        // 滚动条减去算出的距离，实现滚动条回拖
+        document.scrollingElement.scrollTop -= value;
+        // 如果滚动条不到0，就一直调用这个函数
+        if(document.scrollingElement.scrollTop > 0) {
+            setTimeout(goTop, 1);
+        }
+    }
+    function start() {
+        // 获取滚动条滚动的距离
+        var top = document.scrollingElement.scrollTop;
+        // 根据滚动的距离，决定滚动速度
+        value = parseInt(top / 10);
+        // 告诉浏览器，过1MS去执行goTop函数
+        setTimeout(goTop, 1);
     }
 </script>
