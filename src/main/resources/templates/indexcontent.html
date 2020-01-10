@@ -1,0 +1,357 @@
+<style>
+    #news{
+        width: 100%;
+        /*height: 390px;*/
+        padding-top: 10px;
+        padding-right: 0px;
+    }
+    #Carousel_window{
+        width: 95%;
+        /*height: 490px;*/
+        margin: auto;
+        /*background-color: #4E5465;*/
+        position: relative;
+    }
+    #Carousel_window img{
+        width: 270px;
+        height: 400px;
+    }
+    #news_window{
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        width: calc(100% - 255px);
+        height: 400px;
+
+    }
+    .new_topic_ul li{
+        display: block;
+        border-bottom: 2px #ededed solid;
+        border-right: 1px #ccccd9 solid;
+        float: left;
+        text-align: center;
+        height: 30px;
+        width: 22%;
+    }
+    .new_topic_ul li a{
+        color: #660000;
+        font-size: 16px;
+        font-family: 微软雅黑;
+
+    }
+    .new_topic_ul li:hover{
+        border-bottom: 2px #99ccff solid;
+
+    }
+
+</style>
+
+<div id="news">
+    <div id="Carousel_window">
+        <!--轮播界面-->
+        <div class="layui-carousel" id="Carousel" lay-filter="Carousel">
+            <div carousel-item="">
+                <div><a href="javascript:;"><img src="/static/imgs/Carousel_imgs/1.jpg"></a></div>
+                <div><a href="javascript:;"><img src="/static/imgs/Carousel_imgs/2.jpg"></a></div>
+                <div><a href="javascript:;"><img src="/static/imgs/Carousel_imgs/3.jpg"></a></div>
+                <div><a href="javascript:;"><img src="/static/imgs/Carousel_imgs/4.jpg"></a></div>
+                <div><a href="javascript:;"><img src="/static/imgs/Carousel_imgs/5.jpg"></a></div>
+            </div>
+        </div>
+        <!--公告栏-->
+        <div id="news_window">
+            <ul class="new_topic_ul">
+                <li id="new_topic_li_first" style="margin-left: 8%"><a href="javascript:;">最新主题</a></li>
+                <li id="new_topic_li_second"><a href="javascript:;">最新回复</a></li>
+                <li id="new_topic_li_third"><a href="javascript:;">人气热门</a></li>
+                <li id="new_topic_li_fourth" style="border-right: 1px #ffffff solid"><a href="javascript:;">精华作品</a></li>
+            </ul>
+
+            <style>
+                .news_li{
+                    float: left;
+                    border: 1px red solid;
+                    width: 88%;
+                    height: calc(100% - 32px);
+                    margin-left: 8%;
+                }
+                .news_li li{
+                    clear: both;
+                    float: left;
+                    width: 98%;
+                    text-align: center;
+                    line-height: 30px;
+                    height: 31px;
+                    border: 1px salmon solid;
+                    margin-left: 1%;
+                    margin-bottom: 5px;
+                    margin-top: 2px;
+                }
+                #news_li_second{
+                    display: none;
+                }
+                #news_li_third{
+                    display: none;
+                }
+                #news_li_fourth{
+                    display: none;
+                }
+            </style>
+
+            <div class="news_li">
+                 <div id="news_li_first">
+                     <ul style="width: 100%">
+                         <li>1</li>
+                         <li>2</li>
+                         <li>3</li>
+                         <li>4</li>
+                         <li>5</li>
+                         <li>6</li>
+                         <li>6</li>
+                         <li>6</li>
+                         <li>6</li>
+                     </ul>
+                 </div>
+                 <div id="news_li_second">
+                     <ul style="width: 100%">
+                         <li>2</li>
+                         <li>2</li>
+                         <li>3</li>
+                         <li>4</li>
+                         <li>5</li>
+                         <li>6</li>
+                         <li>6</li>
+                         <li>6</li>
+                         <li>6</li>
+                     </ul>
+                 </div>
+                 <div id="news_li_third">
+                    <ul style="width: 100%">
+                        <li>3</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>6</li>
+                        <li>6</li>
+                        <li>6</li>
+                        <li>6</li>
+                    </ul>
+                </div>
+                 <div id="news_li_fourth">
+                    <ul style="width: 100%">
+                        <li>4</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>6</li>
+                        <li>6</li>
+                        <li>6</li>
+                        <li>6</li>
+                    </ul>
+                </div>
+
+            </div>
+
+         </div>
+        <!--公告栏切换JS-->
+        <script>
+            $(function () {
+                $("#new_topic_li_second").hover(function () {
+                    $("#news_li_first").css({hidden:"true",display:"none"});
+                    $("#news_li_second").css({hidden:"false",display:"block"});
+                    $("#news_li_third").css({hidden:"true",display:"none"});
+                    $("#news_li_fourth").css({hidden:"true",display:"none"});
+                })
+                $("#new_topic_li_first").hover(function () {
+                    $("#news_li_first").css({hidden:"false",display:"block"});
+                    $("#news_li_second").css({hidden:"true",display:"none"});
+                    $("#news_li_third").css({hidden:"true",display:"none"});
+                    $("#news_li_fourth").css({hidden:"true",display:"none"});
+                })
+                $("#new_topic_li_third").hover(function () {
+                    $("#news_li_first").css({hidden:"true",display:"none"});
+                    $("#news_li_second").css({hidden:"true",display:"none"});
+                    $("#news_li_third").css({hidden:"false",display:"block"});
+                    $("#news_li_fourth").css({hidden:"true",display:"none"});
+                })
+                $("#new_topic_li_fourth").hover(function () {
+                    $("#news_li_first").css({hidden:"true",display:"none"});
+                    $("#news_li_second").css({hidden:"true",display:"none"});
+                    $("#news_li_third").css({hidden:"true",display:"none"});
+                    $("#news_li_fourth").css({hidden:"false",display:"block"});
+                })
+            })
+        </script>
+
+        <script>
+        layui.use(['carousel', 'form'], function(){
+            var carousel = layui.carousel
+                ,form = layui.form;
+
+            //常规轮播
+            carousel.render({
+                elem: '#Carousel'
+                ,width:'270px'
+                ,height:'400px'
+                ,arrow: 'hover'
+                ,autoplay:true
+                ,interval:3000
+            });
+        });
+    </script>
+
+
+        <style>
+            .topic_window{
+                /*border: 1px royalblue solid;*/
+                width: 100%;
+                height: 200px;
+
+                margin-top: 1px;
+            }
+            .topic_window_toor{
+                width: 100%;
+                background-color: #eff4f8;
+                height: 45px;
+                text-align: center;
+                line-height: 45px;
+                margin-bottom: 6px;
+                margin-top: 5px;
+            }
+            .topic_window_toor p{
+                font-weight: 600;
+                font-size: 16px;
+                font-family: KaiTi_GB2312;
+                display: block;
+                float: left;
+                margin-left: 10px;
+            }
+            .topic_window_toor a{
+                color: #337fe5 !important;
+            }
+            .topic_window_content{
+                clear: both;
+
+            }
+            .table_a{
+                display: block;
+                float: left;
+            }
+            .topic_window_content img{
+                width: 80px !important;
+                height: 80px !important;
+            }
+            .table_h3{
+
+                text-align: left;
+                width: calc(100% - 75px);
+                margin-left:82px ;
+                height: 80px;
+                font-size: 12px;
+                font-weight: 400;
+            }
+            .fname{
+                font-size: 14px !important;
+                font-weight: 700 !important;
+            }
+        </style>
+
+        <div class="topic_window">
+            <div class="topic_window_toor">
+               <p><a href="javascript:;">规则公告</a></p>
+            </div>
+            <div class="topic_window_content">
+                <table summary="横排版块排序" width="100%">
+                    <tbody>
+                        <tr>
+                            <th class="">
+                                <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/1.jpg" class="fl mr10"></a>
+                                <div class="table_h3">
+                                    <h3 class="fname"><a href="javascript:;">规章制度</a></h3>
+                                    主题：5，帖子：335<br>
+                                    最后回复：<a href="javascript:;"><span class="time">前天23:04</span></a>
+                                </div>
+
+                            </th>
+                            <th class="">
+                                <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/2.jpg" class="fl mr10"></a>
+                                <div class="table_h3">
+                                    <h3 class="fname"><a href="javascript:;">论坛公告</a></h3>
+                                    主题：12，帖子：1556<br>
+                                    最后回复：<a href="javascript:;"><span class="time">前天03:21</span></a>
+                                </div>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="topic_window">
+            <div class="topic_window_toor">
+                <p><a href="javascript:;">自由交流</a></p>
+            </div>
+            <div class="topic_window_content">
+                <table summary="横排版块排序" width="100%">
+                    <tbody>
+                    <tr>
+                        <th class="">
+                            <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/3.jpg" class="fl mr10"></a>
+                            <div class="table_h3">
+                                <h3 class="fname"><a href="javascript:;">技术专区</a></h3>
+                                主题：5，帖子：335<br>
+                                最后回复：<a href="javascript:;"><span class="time">前天23:04</span></a>
+                            </div>
+
+                        </th>
+                        <th class="">
+                            <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/4.jpg" class="fl mr10"></a>
+                            <div class="table_h3">
+                                <h3 class="fname"><a href="javascript:;">电影剧照</a></h3>
+                                主题：12，帖子：1556<br>
+                                最后回复：<a href="javascript:;"><span class="time">前天03:21</span></a>
+                            </div>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="topic_window">
+            <div class="topic_window_toor">
+                <p><a href="javascript:;">下载专区</a></p>
+            </div>
+            <div class="topic_window_content">
+                <table summary="横排版块排序" width="100%">
+                    <tbody>
+                    <tr>
+                        <th class="">
+                            <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/5.jpg" class="fl mr10"></a>
+                            <div class="table_h3">
+                                <h3 class="fname"><a href="javascript:;">原创专区</a></h3>
+                                主题：5，帖子：335<br>
+                                最后回复：<a href="javascript:;"><span class="time">前天23:04</span></a>
+                            </div>
+
+                        </th>
+                        <th class="">
+                            <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/6.jpg" class="fl mr10"></a>
+                            <div class="table_h3">
+                                <h3 class="fname"><a href="javascript:;">高清原盘</a></h3>
+                                主题：12，帖子：1556<br>
+                                最后回复：<a href="javascript:;"><span class="time">前天03:21</span></a>
+                            </div>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+   </div>
+
+
+
+</div>
