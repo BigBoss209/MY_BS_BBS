@@ -1,6 +1,8 @@
 package com.example.boot1907.pojo;
 
 import java.util.Date;
+
+import com.alibaba.druid.sql.visitor.functions.Char;
 import lombok.Data;
 
 @Data
@@ -37,4 +39,5 @@ public class User {
 
     private Long userConcern;
 
+    private String valid;
 }

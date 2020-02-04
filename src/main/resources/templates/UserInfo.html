@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+</head>
+<script src="/static/js/jquery-2.1.1.min.js"></script>
+<style>
+    *{
+        margin: 0px;
+        padding: 0px;
+    }
+    body{
+        background-image: url("/static/imgs/Register_login_imgs/Login_BJ.jpg");
+        background-size:100% ;
+    }
+    #userInfo_window{
+        width:36% ;
+        min-width: 420px;
+        min-height: 600px;
+        border: 1px red solid;
+        margin: auto;
+        margin-top: 25px;
+    }
+    #userIfo_toux{
+        width: 100%;
+        height: 30%;
+        min-height: 180px;
+        background-color: #d2a860;
+        position: relative;
+    }
+    #userInfo_xinx{
+        width: 100%;
+        height: 70%;
+        min-height: 420px;
+        background-color: white;
+    }
+    #user_imgs{
+        border: 1px black solid;
+        width: 80px;
+        height: 80px;
+        position: relative;
+        left: 30px;
+        top: 25px;
+    }
+</style>
+
+<body>
+     <div id="userInfo_window">
+         <!--头像信息-->
+         <div id="userIfo_toux">
+             <div id="user_imgs"></div>
+         </div>
+         <!--信息主体 -->
+         <div id="userInfo_xinx">
+
+         </div>
+     </div>
+
+</body>
+</html>

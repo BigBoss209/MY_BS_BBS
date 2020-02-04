@@ -34,6 +34,7 @@ public class UserServiceImpl implements IUserService {
     @Transactional
     public void save(User pojo) {
         passwordHelper.encryptPassword(pojo);
+//        System.out.println(pojo);
         userDao.save(pojo);
     }
 

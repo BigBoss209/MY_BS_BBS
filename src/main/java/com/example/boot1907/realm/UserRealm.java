@@ -25,7 +25,7 @@ public class UserRealm extends AuthorizingRealm {
     }
 
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        System.out.println("------执行了认证方法------");
+
         User dbUser = userDao.findOne(token.getPrincipal().toString());
         if(dbUser == null) {
             throw new UnknownAccountException();
@@ -33,6 +33,7 @@ public class UserRealm extends AuthorizingRealm {
         if("0".equals(dbUser.getUserStatus())) {
             throw new LockedAccountException();
         }
+        System.out.println("------执行了认证方法------");
         // 把正确的用户名和密码给到匹配器,当调用subject.login的时候
         // 匹配器会去自动匹配
         return new SimpleAuthenticationInfo(dbUser.getUserName(),
