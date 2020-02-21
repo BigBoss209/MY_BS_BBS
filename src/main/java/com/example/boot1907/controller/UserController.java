@@ -126,7 +126,7 @@ public class UserController {
 
 
     @PostMapping("/login.do")
-    public ModelAndView login(User user, HttpServletRequest request) {
+    public ModelAndView login(User user, HttpServletRequest request,HttpSession httpSession) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("register_login");
         Subject subject = SecurityUtils.getSubject();
@@ -141,6 +141,7 @@ public class UserController {
                 HttpSession session = request.getSession();
                 User pojo = userService.findOne(user);
                 session.setAttribute("userInfo",pojo);
+                httpSession.setAttribute("userInfo",pojo);
                 return mv;
             }
             String url = savedRequest.getRequestUrl();

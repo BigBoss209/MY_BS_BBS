@@ -38,6 +38,7 @@ public interface IUserDao {
     @ResultMap("userMap")
     List<User> pages(User pojo);
 
+
     class UserDaoProvider {
         public String pagesSql(User pojo) {
             StringBuilder sql = new StringBuilder("select * from BBS_user where 1 = 1 ");
@@ -63,6 +64,16 @@ public interface IUserDao {
             "ON u.user_id = ur.user_id LEFT JOIN BBS_permission p\n" +
             "ON ur.role_id = p.role_id WHERE u.isadmin = 1\n" +
             "AND u.user_name = #{userName,jdbcType=VARCHAR}")
-        // @ResultType(String.class)
+    // @ResultType(String.class)
     Set<String> getUserPermission(String userName);
+
+    //更改用户头像
+    @Update("UPDATE bbs_user SET user_img = #{userImg} WHERE user_id = #{userId} ")
+    void updateImg(User pojo);
+
+    //更改用户信息
+    @Update("UPDATE bbs_user SET user_email = #{userEmail}," +
+            "user_gender = #{userGender}, user_phone = #{userPhone}," +
+            "user_time = #{userTime}, user_show = #{userShow}  WHERE user_id = #{userId} ")
+    void changeInfo(User pojo);
 }

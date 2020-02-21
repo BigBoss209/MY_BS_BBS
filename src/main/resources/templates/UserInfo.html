@@ -5,10 +5,13 @@
     <title>个人中心</title>
 </head>
 <script src="/static/js/jquery-2.1.1.min.js"></script>
+<link rel="stylesheet" href="/static/layui/layui/css/layui.css">
+<script src="/static/layui/layui/layui.js"></script>
 <style>
     *{
         margin: 0px;
         padding: 0px;
+        user-select:none;
     }
     body{
         background-image: url("/static/imgs/Register_login_imgs/Login_BJ.jpg");
@@ -18,14 +21,13 @@
         width:36% ;
         min-width: 420px;
         min-height: 600px;
-        border: 1px red solid;
         margin: auto;
         margin-top: 25px;
     }
     #userIfo_toux{
         width: 100%;
         height: 30%;
-        min-height: 180px;
+        min-height: 180px; 
         background-color: #d2a860;
         position: relative;
     }
@@ -34,28 +36,325 @@
         height: 70%;
         min-height: 420px;
         background-color: white;
+        border: 1px red solid;
     }
     #user_imgs{
-        border: 1px black solid;
         width: 80px;
         height: 80px;
         position: relative;
         left: 30px;
         top: 25px;
     }
+    #user_imgs img{
+        width: 100%;
+        height: 100%;
+    }
+    #user_per{
+        width: 60%;
+        height: 100px;
+        position: relative;
+        left: 120px;
+        bottom: 55px;
+    }
+    #user_per ul li{
+        margin: 7px 0px 1px 8px;
+        height: 25px;
+        line-height: 25px;
+    }
+    #user_per ul li:first-child{
+         font-size: 20px;
+         letter-spacing:1px;
+    }
+    #user_per ul li:last-child{
+        font-size: 12px;
+    }
+    #other_ul li:first-child{
+        float: left;
+        margin-left: 12%;
+        font-size: 15px !important;
+        letter-spacing:0px !important;
+    }
+    #other_ul li:last-child{
+        float: right;
+        margin-right: 18%;
+        font-size: 15px !important;
+        letter-spacing:0px !important;
+    }
+    #other_ul1 li:first-child{
+        float: left;
+        margin-left: 12%;
+        font-size: 15px !important;
+        letter-spacing:0px !important;
+    }
+    #other_ul1 li:last-child{
+        float: right;
+        margin-right: 18%;
+        font-size: 15px !important;
+        letter-spacing:0px !important;
+    }
+    #other_ul1 div{
+        display: inline;
+    }
+    #other_ul div{
+        display: inline;
+    }
 </style>
+
+<!--检查session是否失效-->
+<div id="sessionflag" style="display: none">
+    <div th:if="${session.userInfo ne null}">
+        1
+    </div>
+    <div th:if="${session.userInfo eq null}">
+        0
+    </div>
+</div>
+<script>
+        // alert($("#sessionflag div").text());
+        var flag = $("#sessionflag div").text();
+        if(flag == 0){
+            // 以下方式直接跳转
+            window.location.href='register_login.html';
+        }
+</script>
+
+
+
+
+<script>
+    $(function(){
+        layui.use('upload', function(){
+            var $ = layui.jquery
+                ,upload = layui.upload;
+
+            //普通图片上传
+            var uploadInst = upload.render({
+                elem: '#user_imgs'
+                ,url: '/UserInfo/UserImg.do'
+                ,mode: 'post'
+                ,accept: 'images'
+                ,field: 'projectImg'
+                ,before: function(obj){
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function(index, file, result){
+                        $('#user_imgs img').attr('src', result); //图片链接（base64）
+                    });
+                }
+                // ,done: function(res){
+                //     //如果上传失败
+                //     if(res.code > 0){
+                //         return layer.msg('上传失败');
+                //     }
+                //     //上传成功
+                // }
+                // ,error: function(){
+                //     //演示失败状态，并实现重传
+                //     var demoText = $('#demoText');
+                //     demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                //     demoText.find('.demo-reload').on('click', function(){
+                //         uploadInst.upload();
+                //     });
+                // }
+            });
+        });
+    });
+
+</script>
 
 <body>
      <div id="userInfo_window">
          <!--头像信息-->
          <div id="userIfo_toux">
-             <div id="user_imgs"></div>
+             <!--头像-->
+             <div id="user_imgs">
+                 <div th:if="${#strings.isEmpty(session.userInfo.userImg)}">
+                     <img src="/static/imgs/defult_img.jpg"/>
+                 </div>
+                 <div th:if="${not #strings.isEmpty(session.userInfo.userImg)}">
+                     <img th:src="${session.userInfo.userImg}"/>
+                 </div>
+             </div>
+             <!--昵称_个性签名_关注_粉丝-->
+             <div id="user_per">
+                 <div th:if="${#strings.isEmpty(session.userInfo.userShow)}">
+                      <ul>
+                          <li th:text="${session.userInfo.userName}"></li>
+                          <li style="color: brown">还未设置签名</li>
+                          <li>
+                              <ul id="other_ul">
+                                  <li>我的关注：
+                                      <div th:if="${session.userInfo.userConcern ne null}">
+                                          <span th:text="${session.userInfo.userConcern}"></span>
+                                      </div>
+                                      <div th:if="${session.userInfo.userConcern eq null}">
+                                          <span th:text="0"></span>
+                                      </div>
+                                  </li>
+                                  <li>我的粉丝：
+                                      <div th:if="${session.userInfo.userFans ne null}">
+                                          <span th:text="${session.userInfo.userFans}"></span>
+                                      </div>
+                                      <div th:if="${session.userInfo.userFans eq null}">
+                                          <span th:text="0"></span>
+                                      </div>
+                                  </li>
+                              </ul>
+                          </li>
+                      </ul>
+                 </div>
+                 <div th:if="${not #strings.isEmpty(session.userInfo.userShow)}">
+                      <ul>
+                          <li th:text="${session.userInfo.userName}"></li>
+                          <li  th:text="${session.userInfo.userShow}"></li>
+                          <li>
+                              <ul id="other_ul1">
+                                  <li>我的关注：
+                                      <div th:if="${session.userInfo.userConcern ne null}">
+                                         <span th:text="${session.userInfo.userConcern}"></span>
+                                      </div>
+                                      <div th:if="${session.userInfo.userConcern eq null}">
+                                          <span th:text="0"></span>
+                                      </div></li>
+                                  <li>我的粉丝：
+                                      <div th:if="${session.userInfo.userFans ne null}">
+                                          <span th:text="${session.userInfo.userFans}"></span>
+                                      </div>
+                                      <div th:if="${session.userInfo.userFans eq null}">
+                                          <span th:text="0"></span>
+                                      </div>
+                                  </li>
+                              </ul>
+                          </li>
+                       </ul>
+                 </div>
+             </div>
          </div>
+         <style>
+             #userInfo_xinx li{
+                 border: 1px black solid;
+                 width: 80%;
+                 height: 30px;
+                 margin-left: 8%;
+                 margin-top: 10px;
+                 line-height: 30px;
+                 font-size: 16px;
+                 font-weight: bolder;
+             }
+             #userInfo_xinx li div{
+                 display: inline;
+                 font-weight: normal;
+                 font-size: 15px;
+             }
+             #layerDemo{
+                 position: relative;
+                 top:60px;
+                 left: 350px;
+             }
+         </style>
          <!--信息主体 -->
          <div id="userInfo_xinx">
+            <ul>
+                <li>邮箱：
+                    <div th:if="${session.userInfo.userEmail ne null}">
+                        <span th:text="${session.userInfo.userEmail}"></span>
+                    </div>
+                    <div th:if="${session.userInfo.userEmail eq null}">
+                        <span style="color: brown" th:text="未绑定"></span>
+                    </div>
+                </li>
+                <li>性别：
+                    <div th:if="${session.userInfo.userGender ne null}">
+                        <span th:if="${session.userInfo.userGender eq 1}">男</span>
+                        <span th:if="${session.userInfo.userGender eq 0}">女</span>
+                    </div>
+                    <div th:if="${session.userInfo.userGender eq null}">
+                        <span th:text="男"></span>
+                    </div>
+                </li>
+                <li>手机号：
+                    <div th:if="${session.userInfo.userPhone ne null}">
+                        <span th:text="${session.userInfo.userPhone}"></span>
+                    </div>
+                    <div th:if="${session.userInfo.userPhone eq null}">
+                        <span style="color: brown" th:text="未绑定"></span>
+                    </div>
+                </li>
+                <li>等级：
+                    <div th:if="${session.userInfo.userEx eq null} or ${session.userInfo.userEx eq 0}">
+                        <span style="color: brown" th:text="未有等级"></span>
+                    </div>
+                    <div th:if="${session.userInfo.userEx lt 10} and ${session.userInfo.userEx gt 0}">
+                        <span th:text="一级"></span>
+                    </div>
+                    <div th:if="${session.userInfo.userEx lt 50} and ${session.userInfo.userEx gt 9}">
+                        <span th:text="二级"></span>
+                    </div>
+                    <div th:if="${session.userInfo.userEx lt 100} and ${session.userInfo.userEx gt 49}">
+                        <span th:text="三级"></span>
+                    </div>
+                </li>
+                <li>生日：
+                    <div th:if="${session.userInfo.userTime eq null}">
+                        <span style="color: brown" th:text="未设置生日"></span>
+                    </div>
+                    <div th:if="${session.userInfo.userTime ne null}">
+                        <span th:text="${#dates.format(session.userInfo.userTime, 'yyyy-MM-dd')}"></span>
+                    </div>
+                </li>
+            </ul>
 
+             <div class="site-demo-button" id="layerDemo" style="margin-bottom: 0;">
+                 <button data-method="setTop" class="layui-btn">修改</button>
+             </div>
          </div>
      </div>
+     <script>
+         $(function () {
+             layui.use('layer', function(){ //独立版的layer无需执行这一句
+                 var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+                 //触发事件
+                 var active = {
+                     setTop: function(){
+                         var that = this;
+                         //多窗口模式，层叠置顶
+                         layer.open({
+                             type: 2 //此处以iframe举例
+                             ,title: '修改个人信息'
+                             ,area: ['450px','450px']
+                             ,shade: [0.8, '#000']
+                             ,maxmin: true
+                             ,offset: '100px'
+                             ,scrollbar: false
+                             ,content: '/changeUserInfo.html'
+                             ,btn: ['提交', '取消'] //只是为了演示
+                             ,yes: function(index, layero){
+
+                                 var body = layer.getChildFrame('body', index);
+                                 // console.log(body.html())
+                                 body.find('form').submit();
+
+                                 layer.close(layer.index);
+                             }
+                             ,btn2: function(){
+                                 layer.closeAll();
+                             }
+
+                             ,zIndex: layer.zIndex //重点1
+                             ,success: function(layero){
+                                 layer.setTop(layero); //重点2
+                             }
+                         });
+                     }
+                 }
+
+                 $('#layerDemo .layui-btn').on('click', function(){
+                     var othis = $(this), method = othis.data('method');
+                     active[method] ? active[method].call(this, othis) : '';
+                 });
+             });
+         })
+     </script>
 
 </body>
 </html>

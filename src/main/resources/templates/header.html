@@ -69,10 +69,10 @@
     <div id="tour" width="100%" style="background-color: #2a75ac;height: 37px;margin-top: 0px">
         <!--登录之后要变化-->
         <!--<span th:text="${session.userInfo.userName}">-->
-        <span th:if="${#strings.isEmpty(session.userInfo.userId)}"><a href="register_login.html">注册</a></span>
-        <span th:if="${#strings.isEmpty(session.userInfo.userId)}"><a href="register_login.html">登录</a></span>
-        <span th:if="${not #strings.isEmpty(session.userInfo.userId)}"><a href="UserInfo.html">登出</a></span>
-        <span th:if="${not #strings.isEmpty(session.userInfo.userId)}"><a href="UserInfo.html">个人中心</a></span>
+        <span th:if="${session.userInfo} eq null"><a href="register_login.html">注册</a></span>
+        <span th:if="${session.userInfo} eq null"><a href="register_login.html">登录</a></span>
+        <span th:if="${session.userInfo} ne null"><a href="UserInfo.html">登出</a></span>
+        <span th:if="${session.userInfo} ne null"><a href="UserInfo.html">个人中心</a></span>
     </div>
     <div id ="search">
         <!--搜索框-->

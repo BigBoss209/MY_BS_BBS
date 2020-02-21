@@ -3,7 +3,9 @@ package com.example.boot1907.pojo;
 import java.util.Date;
 
 import com.alibaba.druid.sql.visitor.functions.Char;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 public class User {
@@ -27,6 +29,7 @@ public class User {
 
     private Integer userEx;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date userTime;
 
     private String userShow;

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<script src="/static/js/jquery-2.1.1.min.js"></script>
+<link rel="stylesheet" href="/static/layui/layui/css/layui.css">
+<script src="/static/layui/layui/layui.js"></script>
+<script language="javascript" type="text/javascript" src="/static/js/My97DatePicker/WdatePicker.js"></script>
+<body>
+    <style>
+        #win{
+            margin: auto;
+            width: 80%;
+            height: 100%;
+            border: 1px red solid;
+        }
+        .layui-inline{
+            border: 1px red solid;
+            display: block;
+            margin: auto;
+        }
+    </style>
+    <div id="win">
+        <form  class="layui-form" action="/UserInfo/changeUserInfo.do" method="post">
+            <div class="layui-form-item" style="margin-top: 30px">
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">个性签名：</label>
+                    <div class="layui-input-block">
+                        <input type="show" name="userShow" lay-verify="show" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">邮箱：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="userEmail" lay-verify="email" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">性别：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="userGender" value="1" title="男" checked="">
+                        <input type="radio" name="userGender" value="0" title="女">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                <label class="layui-form-label">手机：</label>
+                <div class="layui-input-block">
+                    <input type="tel" name="userPhone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">生日：</label>
+                    <div class="layui-input-block">
+                        <!--<input type="text" name="userTime" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">-->
+                        <input name="userTime" style="height: 38px !important;" class="Wdate layui-input" autocomplete="off" readonly
+                               onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',firstDayOfWeek:1})">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+
+        form.verify({
+            email:function(value, item){
+                if(!new RegExp("^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$").test(value)){
+                    return "邮箱格式错误"
+                }
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

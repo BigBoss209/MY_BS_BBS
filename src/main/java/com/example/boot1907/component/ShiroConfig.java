@@ -15,6 +15,7 @@ import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.SessionValidationScheduler;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.Cookie;
 import org.apache.shiro.web.servlet.SimpleCookie;
@@ -24,6 +25,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.MethodInvoker;
+
+import javax.servlet.Filter;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -115,7 +118,7 @@ public class ShiroConfig {
         sessionManager.setGlobalSessionTimeout(1800000);
         // sessionManager.setSessionDAO(sessionDAO);
         // url中添加jsessionid/sid
-        sessionManager.setSessionIdUrlRewritingEnabled(true);
+        sessionManager.setSessionIdUrlRewritingEnabled(false);
         sessionManager.setSessionValidationScheduler(sessionValidationScheduler);
         return sessionManager;
     }
@@ -176,11 +179,12 @@ public class ShiroConfig {
         map.put("/**","anon");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
-//        Map<String, Filter> filters = new HashMap<>();
-//        FormAuthenticationFilter formAuthenticationFilter = new FormAuthenticationFilter();
-//        formAuthenticationFilter.setLoginUrl("/login.html");
-//        filters.put("authc", formAuthenticationFilter);
-//        shiroFilterFactoryBean.setFilters(filters);
+        //shrio过滤器
+        Map<String, Filter> filters = new HashMap<>();
+        FormAuthenticationFilter formAuthenticationFilter = new FormAuthenticationFilter();
+        formAuthenticationFilter.setLoginUrl("/register_login.html");
+        filters.put("authc", formAuthenticationFilter);
+        shiroFilterFactoryBean.setFilters(filters);
         //对所有用户认证
         return shiroFilterFactoryBean;
     }

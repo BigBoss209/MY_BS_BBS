@@ -2,7 +2,6 @@ package com.example.boot1907.Service;
 
 import com.example.boot1907.pojo.User;
 
-import java.util.List;
 
 /**
  * @Auther 刘金明
