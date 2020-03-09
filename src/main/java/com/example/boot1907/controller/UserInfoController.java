@@ -78,7 +78,17 @@ public class UserInfoController {
     public void ChangeUserInfo(User user, BindingResult bindingResult, HttpServletRequest request){
         User pojo = (User)request.getSession().getAttribute("userInfo");
         user.setUserId(pojo.getUserId());
-        System.out.println(user);
+        if(user.getUserTime() == null) user.setUserTime(pojo.getUserTime());
         userInfoService.changeInfo(user);
+        //更新session
+        request.getSession().setAttribute("userInfo", getUserInfo(request));
+    }
+
+    @ResponseBody
+    @PostMapping("/getUserInfo.do")
+    public User getUserInfo(HttpServletRequest request){
+        User pojo = (User)request.getSession().getAttribute("userInfo");
+        if (pojo.getUserShow() != null ) pojo.setUserShow(pojo.getUserShow().trim());
+        return userInfoService.getUserInfo(pojo);
     }
 }

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>查看我的帖子</title>
+</head>
+<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css"/>
+<link rel="stylesheet" href="/static/bootstrapvalidator/css/bootstrapValidator.min.css"/>
+<link rel="stylesheet" href="/static/layui/layui/css/layui.css">
+<script src="/static/js/jquery-2.1.1.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
+<script src="/static/layui/layui/layui.js"></script>
+<body>
+
+<!--检查session是否失效-->
+<div id="sessionflag" style="display: none">
+    <div th:if="${session.userInfo ne null}">
+        1
+    </div>
+    <div th:if="${session.userInfo eq null}">
+        0
+    </div>
+</div>
+<script>
+    // alert($("#sessionflag div").text());
+    var flag = $("#sessionflag div").text();
+    if(flag == 0){
+        // 以下方式直接跳转
+        window.location.href='register_login.html';
+    }
+</script>
+
+<div style="display: none" id="layerDemo" th:text="${msg}"></div>
+
+<script>
+    layui.use('layer', function(){ //独立版的layer无需执行这一句
+        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+        //触发事件
+        var active = {
+            setTop: function(){
+                var that = this;
+            }
+            ,confirmTrans: function(e){
+                //配置一个透明的询问框
+                layer.msg(e, {
+                    time: 2000, //20s后自动关闭
+                });
+            }
+        };
+
+        if($('#layerDemo').text()){
+            active.confirmTrans($('#layerDemo').text());
+
+        }
+
+    });
+</script>
+<!--引入公共导航栏-->
+<div id="head" th:include="com/MySearch :: common_head"></div>
+
+<style>
+    .main{
+        margin: 30px;
+        background-color: white;
+    }
+    body{
+        background-color: #efefef;
+    }
+    .btn{
+        float: right;
+        margin-bottom: 10px;
+        margin-left: 30px;
+
+    }
+    .pol{
+        margin-bottom: 30px;
+    }
+    .selectd{
+        float: right;
+    }
+</style>
+<script>
+    $(function () {
+        $.post("/article/getArticleType.do",function (res) {
+            var artTitle = $("#MyartTitle").text();
+            $("#artTitle").attr("value",artTitle);
+            var TypeId = $("#MyartTypeId").text();
+            var str = ""
+            $.each(res,function (i,item) {
+                if(TypeId == item.typeId){
+                    str += "<option selected value='"+item.typeId+"'>"+item.typeName+"</option>"
+                }else {
+                    str += "<option value='"+item.typeId+"'>"+item.typeName+"</option>"
+                }
+            })
+            $("#artTypeId option").after(str)
+        },"json")
+
+
+
+    })
+</script>
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12">
+            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发起</h2>
+            <hr/>
+            <form method="post" id="article" action="/article/reviseArticle.do">
+                <input type="hidden" name="artId" th:value="${article.artId}"/>
+                <div style="display: none" id="MyartTypeId" th:text="${article.artTypeId}"></div>
+                <div style="display: none" id="MyartTitle" th:text="${article.artTitle}"></div>
+                <div class="row pol">
+                    <div class="form-group col-xs-4">
+                        <label for="artTitle" class="control-label">标题</label>
+                        <input type="text" class="form-control" name="artTitle" id="artTitle" placeholder="标题_" readonly>
+                    </div>
+                    <div class="form-group col-xs-3 selectd">
+                        <label for="artTitle"  class="control-label">类型</label>
+                        <select id="artTypeId" name="artTypeId" class="form-control" readonly>
+                            <option value="0">-请选择-</option>
+
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group pol">
+                    <label for="artContent"  class="control-label">问题补充(参照右侧提示)</label>
+                    <textarea th:text="${article.artContent}" class="form-control" id="artContent" name="artContent" cols="30" rows="10" placeholder="问题补充_" readonly></textarea>
+                </div>
+                <div id="myChang"  class="form-group">
+                    <button type="button" class="btn btn-success" onclick="Eidt(this);">修改</button>
+                    <button type="button" class="btn btn-success" onclick="Delete();">删除</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12">
+            <h3>发起问题指南</h3>
+            <p>*问题标题：请用精简的语言描述你发布的问题，不超过25个字</p>
+            <p>*问题补充：详细补充你的问题，并确保问题描述清晰直观，并提供一些相关的资料</p>
+            <p>*关于积分：发帖加10积分，回复加5积分</p>
+        </div>
+    </div>
+</div>
+
+<!--对表单进行验证-->
+<script>
+    $(function () {
+        $('#article').bootstrapValidator({
+            message: 'This value is not valid',
+            excluded: [':disabled', ':hidden', ':not(:visible)'],
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                artTitle: {
+                    message: '标题验证失败!',
+                    validators: {
+                        notEmpty: {
+                            message: '标题不能为空'
+                        },
+                        stringLength: {  //长度限制
+                            max: 25,
+                            message: '标题长度不能超过25个字符'
+                        },
+                        regexp: { //正则表达式
+                            regexp: /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/,
+                            message: '标题只含有汉字、数字、字母、下划线,并且不能以下划线开头和结尾'
+                        }
+                    }
+                },
+                artTypeId: {
+                    message :'文章类型验证失败!',
+                    validators:{
+                        notEmpty:{
+                            message:'必须选择类型'
+                        },
+                        callback: {
+                            message: '必须选择类型',
+                            callback: function(value, validator) {
+                                if (value == 0) {
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+
+                            }
+                        }
+                    }
+                },
+                artContent: {
+                    message: '文章内容验证失败!',
+                    validators: {
+                        notEmpty: {
+                            message: '文章内容不能为空'
+                        },
+                        stringLength: {  //长度限制
+                            max: 2000,
+                            message: '文章内容不能超过2000个字符'
+                        }
+                    }
+                }
+            }
+        });
+
+        $("#btn-test").click(function () {//非submit按钮点击后进行验证，如果是submit则无需此句直接验证
+            $("#article").bootstrapValidator('validate');//提交验证
+            if ($("#article").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码
+                alert("yes");
+            }
+        });
+    });
+</script>
+
+<script>
+
+    function Delete() {
+        var artId = $("form input[name='artId']").val()
+        $.post("/article/deleteArticle.do",{"artId":artId},function (res) {
+            window.location.replace("/profile/questions.do");
+        },"text")
+    }
+
+    function Eidt(e) {
+        $("#artTitle").removeAttr("readonly");
+        $("#artTypeId").removeAttr("readonly");
+        $("#artContent").removeAttr("readonly");
+        $(e).parent().empty();
+        var str = "<button type=\"button\" class=\"btn btn-success\" onclick=\"Cancle(this);\">取消</button>"
+        str +="<button type=\"submit\" class=\"btn btn-success\">提交</button>"
+        $("#myChang").append(str);
+    }
+
+    function Cancle(e) {
+        $("#artTitle").attr("readonly",true);
+        $("#artTypeId").attr("readonly",true);
+        $("#artContent").attr("readonly",true);
+        $(e).parent().empty();
+        $("#myChang").append("<button type=\"button\" class=\"btn btn-success\" onclick=\"Eidt(this);\">修改</button>\n" +
+            "                    <button type=\"button\" class=\"btn btn-success\" onclick=\"Delete();\">删除</button>");
+    }
+</script>
+
+</body>
+</html>

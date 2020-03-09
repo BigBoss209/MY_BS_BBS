@@ -268,19 +268,19 @@
                         <tr>
                             <th class="">
                                 <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/1.jpg" class="fl mr10"></a>
-                                <div class="table_h3">
+                                <div class="table_h3" id="rule_1">
                                     <h3 class="fname"><a href="javascript:;">规章制度</a></h3>
-                                    主题：5，帖子：335<br>
-                                    最后回复：<a href="javascript:;"><span class="time">前天23:04</span></a>
+                                    <!--主题：5，帖子：335<br>-->
+                                    <!--最后回复：<a href="javascript:;"><span class="time">前天23:04</span></a>-->
                                 </div>
 
                             </th>
                             <th class="">
                                 <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/2.jpg" class="fl mr10"></a>
-                                <div class="table_h3">
+                                <div class="table_h3" id="rule_2">
                                     <h3 class="fname"><a href="javascript:;">论坛公告</a></h3>
-                                    主题：12，帖子：1556<br>
-                                    最后回复：<a href="javascript:;"><span class="time">前天03:21</span></a>
+                                    <!--主题：12，帖子：1556<br>-->
+                                    <!--最后回复：<a href="javascript:;"><span class="time">前天03:21</span></a>-->
                                 </div>
                             </th>
                         </tr>
@@ -298,19 +298,19 @@
                     <tr>
                         <th class="">
                             <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/3.jpg" class="fl mr10"></a>
-                            <div class="table_h3">
+                            <div class="table_h3" id="exchange_1">
                                 <h3 class="fname"><a href="javascript:;">技术专区</a></h3>
-                                主题：5，帖子：335<br>
-                                最后回复：<a href="javascript:;"><span class="time">前天23:04</span></a>
+                                <!--主题：5，帖子：335<br>-->
+                                <!--最后回复：<a href="javascript:;"><span class="time">前天23:04</span></a>-->
                             </div>
 
                         </th>
                         <th class="">
                             <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/4.jpg" class="fl mr10"></a>
-                            <div class="table_h3">
+                            <div class="table_h3" id="exchange_2">
                                 <h3 class="fname"><a href="javascript:;">电影剧照</a></h3>
-                                主题：12，帖子：1556<br>
-                                最后回复：<a href="javascript:;"><span class="time">前天03:21</span></a>
+                                <!--主题：12，帖子：1556<br>-->
+                                <!--最后回复：<a href="javascript:;"><span class="time">前天03:21</span></a>-->
                             </div>
                         </th>
                     </tr>
@@ -328,19 +328,19 @@
                     <tr>
                         <th class="">
                             <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/5.jpg" class="fl mr10"></a>
-                            <div class="table_h3">
+                            <div class="table_h3" id="dow_1">
                                 <h3 class="fname"><a href="javascript:;">原创专区</a></h3>
-                                主题：5，帖子：335<br>
-                                最后回复：<a href="javascript:;"><span class="time">前天23:04</span></a>
+                                <!--主题：5，帖子：335<br>-->
+                                <!--最后回复：<a href="javascript:;"><span class="time">前天23:04</span></a>-->
                             </div>
 
                         </th>
                         <th class="">
                             <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/6.jpg" class="fl mr10"></a>
-                            <div class="table_h3">
+                            <div class="table_h3" id="dow_2">
                                 <h3 class="fname"><a href="javascript:;">高清原盘</a></h3>
-                                主题：12，帖子：1556<br>
-                                最后回复：<a href="javascript:;"><span class="time">前天03:21</span></a>
+                                <!--主题：12，帖子：1556<br>-->
+                                <!--最后回复：<a href="javascript:;"><span class="time">前天03:21</span></a>-->
                             </div>
                         </th>
                     </tr>
@@ -349,8 +349,68 @@
             </div>
         </div>
 
-
    </div>
+    <!--获取展示数据-->
+    <script>
+        $(function () {
+            $.post("/Index/getArticleInfo.do",function (res) {
+                for (let i = 0; i < res.length; i++) {
+                    if(res[i].articleType.typeName == $("#rule_1 h3 a").text()){
+                        $("#rule_1 h3 a").attr("href","/profile/search.do?typeId="+res[i].articleType.typeId)
+                        $("#rule_1").append("帖子："+res[i].total+"<br>\n" +
+                            "最后回复：<a href=\"javascript:;\"><span class=\"time\">"+getLocalTime(res[i].lastReply)+"</span></a>")
+                    }
+                    if(res[i].articleType.typeName == $("#rule_2 h3 a").text()){
+                        $("#rule_2 h3 a").attr("href","/profile/search.do?typeId="+res[i].articleType.typeId)
+                        $("#rule_2").append("帖子："+res[i].total+"<br>\n" +
+                            "最后回复：<a href=\"javascript:;\"><span class=\"time\">"+getLocalTime(res[i].lastReply)+"</span></a>")
+                    }
+                    if(res[i].articleType.typeName == $("#exchange_1 h3 a").text()){
+                        $("#exchange_1 h3 a").attr("href","/profile/search.do?typeId="+res[i].articleType.typeId)
+                        $("#exchange_1").append("帖子："+res[i].total+"<br>\n" +
+                            "最后回复：<a href=\"javascript:;\"><span class=\"time\">"+getLocalTime(res[i].lastReply)+"</span></a>")
+                    }
+                    if(res[i].articleType.typeName == $("#exchange_2 h3 a").text()){
+                        $("#exchange_2 h3 a").attr("href","/profile/search.do?typeId="+res[i].articleType.typeId)
+                        $("#exchange_2").append("帖子："+res[i].total+"<br>\n" +
+                            "最后回复：<a href=\"javascript:;\"><span class=\"time\">"+getLocalTime(res[i].lastReply)+"</span></a>")
+                    }
+                    if(res[i].articleType.typeName == $("#dow_1 h3 a").text()){
+                        $("#dow_1 h3 a").attr("href","/profile/search.do?typeId="+res[i].articleType.typeId)
+                        $("#dow_1").append("帖子："+res[i].total+"<br>\n" +
+                            "最后回复：<a href=\"javascript:;\"><span class=\"time\">"+getLocalTime(res[i].lastReply)+"</span></a>")
+                    }
+                    if(res[i].articleType.typeName == $("#dow_2 h3 a").text()){
+                        $("#dow_2 h3 a").attr("href","/profile/search.do?typeId="+res[i].articleType.typeId)
+                        $("#dow_2").append("帖子："+res[i].total+"<br>\n" +
+                            "最后回复：<a href=\"javascript:;\"><span class=\"time\">"+getLocalTime(res[i].lastReply)+"</span></a>")
+                    }
+                }
+
+                // for (let i = 0; i < res.length; i++) {
+                //     alert(res[i].articleType.typeName);
+                // }
+            },"json")
+        })
+
+        //日期转换
+        function getLocalTime(date) {
+            if(date == null) return " ";
+            var oDate = new Date(parseInt(date)),
+                oYear = oDate.getFullYear(),
+                oMonth = oDate.getMonth()+1,
+                oDay = oDate.getDate(),
+                oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay);//最后拼接时间
+            return oTime;
+        }
+        //补0操作
+        function getzf(num){
+            if(parseInt(num) < 10){
+                num = '0'+num;
+            }
+            return num;
+        }
+    </script>
 
 
 

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageName}"></title>
+</head>
+<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css"/>
+<link rel="stylesheet" href="/static/bootstrapvalidator/css/bootstrapValidator.min.css"/>
+<link rel="stylesheet" href="/static/layui/layui/css/layui.css">
+<link rel="stylesheet" href="/static/customize/comment.css">
+<script src="/static/js/jquery-2.1.1.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
+<script src="/static/layui/layui/layui.js"></script>
+<body>
+<div th:text="${pageNum}" ></div>
+    <div id="getPageName" style="display: none" th:text="${page}"></div>
+    <!--引入公共导航栏-->
+    <div id="head" th:include="com/MySearch :: common_head"></div>
+
+    <style>
+        .main{
+            margin: 30px;
+            background-color: white;
+        }
+        body{
+            background-color: #efefef;
+        }
+        .myStyle{
+            margin-top: 10px;
+        }
+        .myImg{
+            height: 55px;
+            width: 55px;
+        }
+    </style>
+
+    <script>
+        $(function () {
+           var msg = $("title").text()
+           var groupVal = $(".list-group a");
+            for (let i = 0; i < groupVal.length; i++) {
+                if(msg == groupVal[i].text){
+                    $(".list-group").children().eq(i).addClass("active");
+                }
+            }
+
+
+            var pageName = $("#getPageName").text();
+            if(pageName == "questions"){
+                $.post("/PageNum/getPageNum.do",{"pageName":pageName},function (res) {
+                    var str = ''
+                    for (let i = 0; i < res.pageNum; i++) {
+                        if(i == 0){
+                            str+='<li class="active"><a href="#" onclick="myClick(this);">'+(i+1)+'</a></li>'
+                        }else {
+                            str+='<li><a href="#" onclick="myClick(this);">'+(i+1)+'</a></li>'
+                        }
+                    }
+                    $(".pagination li:first-child").after(str);
+                    $(".pagination li:first-child").addClass("disabled")
+                },"json")
+            }
+            if(pageName == "replys"){}
+
+
+
+        })
+        //分页跳转
+        function myClick(e){
+            $(".pagination li").removeClass("active");
+            $(".pagination li").removeClass("disabled");
+            $(e).parent().addClass("active")
+            var num = $(e).text();
+            var lastnum = $(".pagination li").eq(-2).text();
+            var firstnum = $(".pagination li").eq(1).text();
+            if(num == lastnum) $(".pagination li").eq(-1).addClass("disabled")
+            if(num == firstnum) $(".pagination li").eq(0).addClass("disabled")
+            //刷新列表
+            $.post("/profile/AJquestions.do",{"pageNum":num},function (res) {
+               var str = '';
+               for (let i = 0; i < res.pageInfo.list.length; i++) {
+                    str+="<div class=\"media\">\n" +
+                        "                        <div class=\"media-left media-middle \">\n" +
+                        "                            <a href=\"#\">\n" +
+                        "                                <img class=\"media-object img-thumbnail myImg\" src="+res.user.userImg+" alt=\"\\static\\imgs\\defult_img.jpg\">\n" +
+                        "                            </a>\n" +
+                        "                        </div>\n" +
+                        "                        <div class=\"media-body\">\n" +
+                        "                            <li>\n" +
+                        "                              <span>\n" +
+                        "                                <a class=\"layui-badge layui-bg-blue\">提问</a>\n" +
+                        "                              </span>\n" +
+                        "                                <a href='/article/changeArticle.do?artId="+res.pageInfo.list[i].artId+"' class=\"list-post-title\">"+res.pageInfo.list[i].artTitle+"</a>\n" +
+                        "\n" +
+                        "                                <div class=\"fly-list-info\">\n" +
+                        "                                    <a href=\"#\" link=\"\">\n" +
+                        "                                        <cite>"+res.user.userName+"</cite>\n" +
+                        "                                    </a>\n" +
+                        "                                    <span>"+getLocalTime(res.pageInfo.list[i].artCreTime)+"</span>\n" +
+                        "\n" +
+                        "                                    <span class=\"fly-list-nums\">\n" +
+                        "                                          <i class=\"layui-icon layui-icon-reply-fill\" style=\"font-size: 20px;\" title=\"回答\"></i> <span>"+res.pageInfo.list[i].artComNum+"</span>\n" +
+                        "                                </span>\n" +
+                        "                                </div>\n" +
+                        "                                <div class=\"fly-list-badge\">\n" +
+                        "\n" +
+                        "\n" +
+                        "                                </div>\n" +
+                        "                            </li>\n" +
+                        "                        </div>\n" +
+                        "                    </div>"
+                }
+               $(".media").remove();
+               $("#showWin").append(str);
+
+            },"json")
+        };
+
+        //上一页
+        function preClick(e) {
+            if($(".pagination li[class='active']").text() == $(".pagination li").eq(1).text()) return;
+            $(".pagination li[class='active']").prev().find("a").click();
+        }
+        //下一页
+        function nextClick(e) {
+            if($(".pagination li[class='active']").text() == $(".pagination li").eq(-2).text()) return;
+            $(".pagination li[class='active']").next().find("a").click();
+        }
+
+        //日期转换
+        function getLocalTime(date) {
+            var oDate = new Date(parseInt(date)),
+                oYear = oDate.getFullYear(),
+                oMonth = oDate.getMonth()+1,
+                oDay = oDate.getDate(),
+                oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay);//最后拼接时间
+            return oTime;
+        }
+        //补0操作
+        function getzf(num){
+            if(parseInt(num) < 10){
+                num = '0'+num;
+            }
+            return num;
+        }
+
+    </script>
+
+    <div class="container-fluid main">
+        <div class="row myStyle">
+            <div class="col-lg-9 col-md-12 col-sm-12">
+                <h2><span id="my" th:text="${pageName}"></span></h2>
+                <hr/>
+                <!--展示数据-->
+                <div id="showWin" th:each="obj,listStatus : ${Mylist.list}">
+                    <div class="media">
+                        <div class="media-left media-middle ">
+                            <a href="#">
+                                <img class="media-object img-thumbnail myImg" th:src="${session.userInfo.userImg}" alt="\static\imgs\defult_img.jpg">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <li>
+                              <span>
+                                <a class="layui-badge layui-bg-blue">提问</a>
+                              </span>
+                                <a th:href="@{'/article/changeArticle.do?artId='+${obj.artId}}" class="list-post-title" th:text="${obj.artTitle}"></a>
+
+                                <div class="fly-list-info">
+                                    <a href="#" link="">
+                                        <cite th:text="${session.userInfo.userName}"></cite>
+                                    </a>
+                                    <span th:text="${#dates.format(obj.artCreTime,'yyyy-MM-dd')}"></span>
+
+                                    <span class="fly-list-nums">
+                                          <i class="layui-icon layui-icon-reply-fill" style="font-size: 20px;" title="回答"></i> <span th:text="${obj.artComNum}"></span>
+                                </span>
+                                </div>
+                                <div class="fly-list-badge">
+
+
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+
+                <!--分页-->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li>
+                            <a href="#" aria-label="Previous" onclick="preClick(this);">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" aria-label="Next" onclick="nextClick(this);">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3 col-md-12 col-sm-12">
+                <div class="list-group myStyle">
+                    <a href="/profile/questions.do" class="list-group-item">我的问题</a>
+                    <a href="/profile/replys.do" class="list-group-item">我的回复</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

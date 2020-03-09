@@ -61,6 +61,23 @@
     .search button:hover{
         color: deepskyblue;
     }
+    .mynav{
+        background-color: #f5f5f5;
+        min-width: 45px;
+    }
+    .mynav li a{
+        color: black !important;
+    }
+    .main{
+        float: right;
+        margin-right: 8px;
+    }
+    #myImg{
+        line-height: 37px;
+        width: 30px;
+        height: 30px;
+        border: 1px #00bfff solid;
+    }
 </style>
 
     <div id="logImg">
@@ -71,15 +88,28 @@
         <!--<span th:text="${session.userInfo.userName}">-->
         <span th:if="${session.userInfo} eq null"><a href="register_login.html">注册</a></span>
         <span th:if="${session.userInfo} eq null"><a href="register_login.html">登录</a></span>
-        <span th:if="${session.userInfo} ne null"><a href="UserInfo.html">登出</a></span>
-        <span th:if="${session.userInfo} ne null"><a href="UserInfo.html">个人中心</a></span>
+        <span th:if="${session.userInfo} eq null"><a href="register_login.html">发帖</a></span>
+        <span th:if="${session.userInfo} ne null"><a href="/logout.do">登出</a></span>
+        <span th:if="${session.userInfo} ne null"><a href="public.html">发帖</a></span>
+        <span th:if="${session.userInfo} ne null">
+            <div class="btn-group main">
+              <img class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                   id="myImg" th:src="${session.userInfo.userImg}" onerror="javascript:this.src='/static/imgs/defult_img.jpg';">
+              <ul class="dropdown-menu mynav">
+                <li><a href="UserInfo.html">个人中心</a></li>
+                <li><a href="/profile/questions.do">我的文章</a></li>
+                <li><a href="/profile/replys.do">我的回复</a></li>
+              </ul>
+            </div>
+
+        </span>
     </div>
     <div id ="search">
         <!--搜索框-->
-        <form href="地址要设置" method="post">
+        <form action="/Allsearch.do" method="post">
             <div class="search">
                 <input type="text" style="padding-left: 5px" placeholder="  帖子标题" name="keyword" id="" value="" />
-                <button><i>查询</i></button>
+                <button type="submit"><i>查询</i></button>
             </div>
         </form>
     </div>

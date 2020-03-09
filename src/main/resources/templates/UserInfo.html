@@ -36,7 +36,6 @@
         height: 70%;
         min-height: 420px;
         background-color: white;
-        border: 1px red solid;
     }
     #user_imgs{
         width: 80px;
@@ -231,7 +230,6 @@
          </div>
          <style>
              #userInfo_xinx li{
-                 border: 1px black solid;
                  width: 80%;
                  height: 30px;
                  margin-left: 8%;
@@ -264,8 +262,8 @@
                 </li>
                 <li>性别：
                     <div th:if="${session.userInfo.userGender ne null}">
-                        <span th:if="${session.userInfo.userGender eq 1}">男</span>
-                        <span th:if="${session.userInfo.userGender eq 0}">女</span>
+                        <span th:if="${session.userInfo.userGender eq '1'}">男</span>
+                        <span th:if="${session.userInfo.userGender eq '0'}">女</span>
                     </div>
                     <div th:if="${session.userInfo.userGender eq null}">
                         <span th:text="男"></span>
@@ -281,7 +279,7 @@
                 </li>
                 <li>等级：
                     <div th:if="${session.userInfo.userEx eq null} or ${session.userInfo.userEx eq 0}">
-                        <span style="color: brown" th:text="未有等级"></span>
+                        <span th:text="0"></span>
                     </div>
                     <div th:if="${session.userInfo.userEx lt 10} and ${session.userInfo.userEx gt 0}">
                         <span th:text="一级"></span>
@@ -308,11 +306,18 @@
              </div>
          </div>
      </div>
+
      <script>
          $(function () {
+
+             //修改不能及时跟新
+             // $.post("/UserInfo/getUserInfo.do",function (res) {
+             //     // alert(JSON.stringify(res));
+             //
+             // },"json")
+
              layui.use('layer', function(){ //独立版的layer无需执行这一句
                  var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
-
                  //触发事件
                  var active = {
                      setTop: function(){
@@ -329,17 +334,14 @@
                              ,content: '/changeUserInfo.html'
                              ,btn: ['提交', '取消'] //只是为了演示
                              ,yes: function(index, layero){
-
                                  var body = layer.getChildFrame('body', index);
-                                 // console.log(body.html())
-                                 body.find('form').submit();
 
+                                 body.find('form').submit();
                                  layer.close(layer.index);
                              }
                              ,btn2: function(){
                                  layer.closeAll();
                              }
-
                              ,zIndex: layer.zIndex //重点1
                              ,success: function(layero){
                                  layer.setTop(layero); //重点2

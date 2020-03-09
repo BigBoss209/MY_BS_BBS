@@ -8,4 +8,6 @@ public interface IUserInfoService extends IService{
 
     //更改信息
     void changeInfo(User pojo);
+
+    User getUserInfo(User pojo);
 }

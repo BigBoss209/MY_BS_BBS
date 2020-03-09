@@ -17,7 +17,7 @@ public interface IUserDao {
             @Result(property = "userId", column = "USER_ID"),
             @Result(property = "userName", column = "USER_NAME"),
             @Result(property = "userEmail", column = "USER_EMAIL"),
-            @Result(property = "userSex", column = "USER_SEX"),
+            @Result(property = "userGender", column = "USER_GENDER"),
             @Result(property = "userPhone", column = "USER_PHONE"),
             @Result(property = "isadmin", column = "ISADMIN"),
             @Result(property = "userEx", column = "USER_EX"),
@@ -76,4 +76,9 @@ public interface IUserDao {
             "user_gender = #{userGender}, user_phone = #{userPhone}," +
             "user_time = #{userTime}, user_show = #{userShow}  WHERE user_id = #{userId} ")
     void changeInfo(User pojo);
+
+   //得到用户信息
+    @Select("select * from bbs_user where user_id = #{userId}")
+    @ResultMap("userMap")
+    User getUserInfo(User pojo);
 }

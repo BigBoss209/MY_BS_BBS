@@ -122,9 +122,6 @@ public class UserController {
         return false;
     }
 
-
-
-
     @PostMapping("/login.do")
     public ModelAndView login(User user, HttpServletRequest request,HttpSession httpSession) {
         ModelAndView mv = new ModelAndView();
@@ -165,6 +162,14 @@ public class UserController {
         }
         mv.addObject("msg", error);
         return mv;
+    }
+
+    @RequestMapping("/logout.do")
+    public ModelAndView logout(HttpServletRequest request){
+        ModelAndView modelAndView = new ModelAndView();
+        request.getSession().invalidate();
+        modelAndView.setViewName("redirect:register_login.html");
+        return modelAndView;
     }
 }
 

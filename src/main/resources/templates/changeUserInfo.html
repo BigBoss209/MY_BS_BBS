@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
 </head>
@@ -13,16 +13,14 @@
             margin: auto;
             width: 80%;
             height: 100%;
-            border: 1px red solid;
         }
         .layui-inline{
-            border: 1px red solid;
             display: block;
             margin: auto;
         }
     </style>
     <div id="win">
-        <form  class="layui-form" action="/UserInfo/changeUserInfo.do" method="post">
+        <form  class="layui-form" action="/UserInfo/changeUserInfo.do" method="post" lay-filter="userInfo">
             <div class="layui-form-item" style="margin-top: 30px">
 
                 <div class="layui-inline">
@@ -35,7 +33,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">邮箱：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="userEmail" lay-verify="email" autocomplete="off" class="layui-input">
+                        <input type="text" name="userEmail" lay-verify="email" autocomplete="off" class="layui-input" placeholder="请输入邮箱">
                     </div>
                 </div>
 
@@ -50,7 +48,7 @@
                 <div class="layui-inline">
                 <label class="layui-form-label">手机：</label>
                 <div class="layui-input-block">
-                    <input type="tel" name="userPhone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                    <input type="tel" name="userPhone" lay-verify="required|phone" autocomplete="off" class="layui-input" placeholder="请输入手机号">
                 </div>
             </div>
 
@@ -66,19 +64,38 @@
         </form>
     </div>
 <script>
+    function getLocalTime(date) {
+        return new Date(parseInt(date)).toLocaleString().replace(/:\d{1,2}$/,' ');
+    }
+
     layui.use(['form', 'layedit', 'laydate'], function(){
         var form = layui.form
             ,layer = layui.layer
             ,layedit = layui.layedit
             ,laydate = layui.laydate;
-
+        //过滤器失效。。。。
         form.verify({
             email:function(value, item){
+                console.log(value)
                 if(!new RegExp("^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$").test(value)){
-                    return "邮箱格式错误"
+                    return '邮箱格式错误';
                 }
             }
         });
+
+        //表单赋值
+        $.post("/UserInfo/getUserInfo.do",function (res) {
+            // alert(JSON.stringify(res));
+
+            $("input[name='userTime']").val(getLocalTime(res.userTime))
+            form.val('userInfo', {
+                "userShow": res.userShow // "name": "value"
+                ,"userPhone": res.userPhone
+                ,"userEmail": res.userEmail
+                ,"userGender": res.userGender
+            });
+        },"json")
+
     });
 
 </script>

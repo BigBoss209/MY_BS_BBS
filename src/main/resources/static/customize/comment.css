@@ -1,0 +1,48 @@
+.media-body a{
+    text-decoration: none;
+}
+.media-body li{
+    line-height: 26px;
+    margin-top: 4px;
+}
+.list-post-title{
+    color: #333;
+    display: inline-block;
+    max-width: 80%;
+    padding-right: 10px;
+    font-size: 16px;
+}
+.list-post-title:hover{
+    color: #42b983;
+    transition: all .3s;
+}
+.fly-list-info  cite{
+    font-size: 13px;
+
+}
+.fly-list-info  cite:hover{
+    color: #42b983;
+    transition: all .3s;
+}
+.fly-list-nums{
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding-right: 0 !important;
+}
+.fly-list-info{
+    position: relative;
+}
+.media{
+    border-bottom: 1px #bbbbbb dashed;
+    margin-top: 8px;
+}
+.media-middle img{
+    margin-bottom: 10px;
+}
+.main{
+    padding-bottom: 20px;
+}
+cite{
+    margin-right: 8px;
+}

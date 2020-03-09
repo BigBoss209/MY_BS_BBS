@@ -29,6 +29,11 @@ public class UserInfoServiceImpl implements IUserInfoService {
     }
 
     @Override
+    public User getUserInfo(User pojo) {
+        return userDao.getUserInfo(pojo);
+    }
+
+    @Override
     public Object findOne(Object pojo) {
         return null;
     }
