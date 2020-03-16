@@ -35,19 +35,18 @@ public class ArticleController {
     }
 //发帖
     @PostMapping("/addArticle.do")
-    public ModelAndView addArticle(Article article, HttpServletRequest request){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/public.html");
+    @ResponseBody
+    public Article addArticle(Article article, HttpServletRequest request){
         if(!havaSession(request)) {
-            modelAndView.setViewName("redirect:"+"/register_login.html");
-            return modelAndView;
+            article.setArtContent("请登陆后重试");
+            return article;
         }
         User userInfo = (User)request.getSession().getAttribute("userInfo");
         article.setArtUserId(userInfo.getUserId());
         article.setArtCreTime(new Date());
         articleService.addArticle(article);
-        modelAndView.addObject("msg","success");
-        return modelAndView;
+        article.setArtContent("发表成功");
+        return article;
     }
 
     @RequestMapping("/changeArticle.do")
@@ -68,19 +67,20 @@ public class ArticleController {
     }
 
     @PostMapping("/reviseArticle.do")
-    public ModelAndView reviseArticle(Article article, HttpServletRequest request){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/Article/editArticle.html");
+    @ResponseBody
+    public Article reviseArticle(Article article, HttpServletRequest request){
+        System.out.println(article);
+
         if(!havaSession(request)) {
-            modelAndView.setViewName("redirect:"+"/register_login.html");
-            return modelAndView;
+            article.setArtContent("请登陆后重试");
+            return article;
         }
         User userInfo = (User)request.getSession().getAttribute("userInfo");
         article.setArtUserId(userInfo.getUserId());
         article.setArtCreTime(new Date());
         articleService.reviseArticle(article);
-        modelAndView.addObject("msg","修改成功");
-        return modelAndView;
+        article.setArtContent("修改成功");
+        return article;
     }
 
     @PostMapping("/deleteArticle.do")
@@ -93,6 +93,19 @@ public class ArticleController {
         articleService.deleteArticle(article);
         String msg="删除成功";
         return msg;
+    }
+
+    @RequestMapping("/watchArticle.do")
+    public ModelAndView watchArticle(@Param("artId") Integer artId){
+        ModelAndView modelAndView = new ModelAndView();
+        //        还可以添加错误页面
+        if(!articleService.isArt(artId)){
+            modelAndView.setViewName("error.html");
+            modelAndView.addObject("message","帖子查询错误，要不换个试试！！");
+            return modelAndView;
+        }
+        modelAndView.setViewName("/Article/detailArticle.html");
+        return modelAndView;
     }
 
 

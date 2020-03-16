@@ -1,0 +1,154 @@
+.main{
+	margin: 30px 120px;
+	background-color: white;
+}
+body{
+	background-color: #efefef;
+}
+.myStyle{
+	margin-top: 10px;
+}
+.detail-box{
+	padding: 20px;
+
+}
+.detail-box h3{
+	font-weight: 700;
+}
+.detail-about{
+	margin: 10px 18px;
+	position: relative;
+	line-height: 20px;
+	padding: 15px 15px 15px 75px;
+	font-size: 13px;
+	background-color: #f8f8f8;
+	color: #999;
+}
+.fly-avatar{
+	position: absolute;
+	left: 14px;
+	top: 2px;
+}
+a{
+	color: #333;
+	text-decoration: none !important;
+}
+.fly-avatar img {
+	display: block;
+	width: 45px;
+	height: 45px;
+	margin: 0;
+	border-radius: 2px;
+}
+img {
+	border: none;
+}
+.fly-detail-user {
+	white-space: nowrap;
+	overflow: hidden;
+}
+.fly-detail-user a {
+	padding-right: 10px;
+	font-size: 14px;
+}
+.fly-link {
+	color: #01AAED;
+}
+a cite {
+	font-style: normal;
+}
+.detail-fly-list-nums {
+	position: absolute;
+	right: 16px;
+	top: 18px;
+	padding-right: 0 !important;
+	font-size: 16px;
+}
+.detail-fly-list-nums i {
+	padding: 0 3px 0 15px;
+	font-size: 22px;
+	color: #999;
+}
+.detail-fly-list-nums .glyphicon{
+	margin: 5px 10px 0px 10px;
+	color: #999999;
+}
+.detail-hits{
+	line-height: 18px;
+	text-align: right;
+}
+.fly-link:hover {
+	color: #5FB878;
+}
+#Reply textarea{
+	margin-top: 10px;
+	resize : none
+}
+layui-elem-quote a:hover {
+	color: #5FB878;
+}
+legend{
+	display:block;
+	padding:0;
+	margin-bottom:20px;
+	font-size:21px;
+	line-height:inherit;
+	color:#333;
+	border:0;
+}
+.media-object{
+	width: 64px;
+	height: 64px;
+}
+.layui-field-title {
+	margin: 10px 0 0px;
+	border-width: 1px 0 0;
+}
+.list-post-title{
+   color:#30c4f7 !important;
+}
+.fly-list-info{
+	color: #a699a6;
+}
+.detail-body{
+	margin: 5px 14px 0px;
+	min-height: 0;
+	line-height: 10px;
+	font-size: 15px;
+	color: #333;
+	word-wrap: break-word;
+}
+.jieda-reply{
+	margin-bottom: 10px;
+}
+.jieda-reply > span {
+	padding-right: 15px;
+	color: #999;
+	cursor: pointer;
+
+}
+.changColor:hover{
+	color: #cc0000;
+}
+.seReply{
+	padding: 8px 15px;
+	background-color: #eee;
+	margin: 5px;
+    position: relative;
+}
+
+.seReply .detail-body {
+	margin: 5px 14px 11px;
+}
+.form-control{
+	margin: 8px;
+}
+.Mypull-right{
+	float: right;
+	margin-top: -32px;
+	margin-right: -6px;
+}
+.myDiv{
+	width: 20px;
+	height: 30px;
+}

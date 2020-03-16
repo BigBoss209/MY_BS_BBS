@@ -1,5 +1,6 @@
 package com.example.boot1907.Service;
 import com.example.boot1907.bo.ArticleInfo;
+import com.example.boot1907.bo.Article_User_Info;
 import com.example.boot1907.pojo.Article;
 import com.example.boot1907.pojo.ArticleType;
 import com.example.boot1907.pojo.User;
@@ -24,4 +25,10 @@ public interface IArticleService extends IService{
     void getArticleInfo(ArticleInfo articleInfo);
 
     Object searchByTypeId(int typeId);
+
+    boolean isType(long typeId);
+
+    void getArtilcleInfo(int typeId, List<Article_User_Info> articleUserInfoList,String selectType);
+
+    boolean isArt(Integer artId);
 }

@@ -8,10 +8,16 @@
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css"/>
 <link rel="stylesheet" href="/static/bootstrapvalidator/css/bootstrapValidator.min.css"/>
 <link rel="stylesheet" href="/static/layui/layui/css/layui.css">
+<link rel="stylesheet" href="/static/editor/css/editormd.preview.min.css" />
+<link rel="stylesheet" href="/static/editor/css/editormd.min.css" />
 <script src="/static/js/jquery-2.1.1.min.js"></script>
 <script src="/static/bootstrap/js/bootstrap.min.js"></script>
 <script src="/static/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
 <script src="/static/layui/layui/layui.js"></script>
+<script src="/static/editor/editormd.min.js"></script>
+<script src="/static/editor/lib/marked.min.js"></script>
+<script src="/static/editor/lib/prettify.min.js"></script>
+<script src="/static/editor/editormd.min.js"></script>
 <body>
 
 <!--检查session是否失效-->
@@ -127,7 +133,30 @@
                 </div>
                 <div class="form-group pol">
                     <label for="artContent"  class="control-label">问题补充(参照右侧提示)</label>
-                    <textarea th:text="${article.artContent}" class="form-control" id="artContent" name="artContent" cols="30" rows="10" placeholder="问题补充_" readonly></textarea>
+                    <div id="editor">
+                        <div id="markdown-view">
+                            <textarea style="display:none;" th:text="${article.artContent}" class="form-control" id="artContent" name="artContent" cols="30" rows="10" placeholder="问题补充_" readonly></textarea>
+                        </div>
+                        <script type="text/javascript">
+                            var Myval = ""
+
+                            $(function() {
+                                var testView = editormd.markdownToHTML("markdown-view", {
+                                    height: 640,
+                                    saveHTMLToTextarea : true,
+                                    htmlDecode      : "style,script,iframe",
+                                    emoji           : true,
+                                    taskList        : true,
+                                    readOnly        : true,
+                                    tex             : true
+                                });
+                                Myval = testView.getMarkdown();
+
+                            });
+                        </script>
+                    </div>
+
+
                 </div>
                 <div id="myChang"  class="form-group">
                     <button type="button" class="btn btn-success" onclick="Eidt(this);">修改</button>
@@ -146,8 +175,8 @@
 
 <!--对表单进行验证-->
 <script>
-    $(function () {
-        $('#article').bootstrapValidator({
+
+    $('#article').bootstrapValidator({
             message: 'This value is not valid',
             excluded: [':disabled', ':hidden', ':not(:visible)'],
             feedbackIcons: {
@@ -206,13 +235,114 @@
             }
         });
 
-        $("#btn-test").click(function () {//非submit按钮点击后进行验证，如果是submit则无需此句直接验证
-            $("#article").bootstrapValidator('validate');//提交验证
-            if ($("#article").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码
-                alert("yes");
+    <!--获取url参数-->
+    function getQueryString(name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return unescape(r[2]);
+        }
+        return null;
+    }
+
+
+    function MySub() {
+        $("#article").bootstrapValidator('validate');//提交验证
+        if ($("#article").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码
+
+
+            var artTitle = $("#artTitle").val()
+            var artTypeId = $("#artTypeId").val()
+            var artContent = $("#editor textarea").text()
+            var artId = getQueryString("artId")
+
+            if(artContent==""){
+                layui.use('layer', function(){ //独立版的layer无需执行这一句
+                    var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+                    //触发事件
+                    var active = {
+                        setTop: function(){
+                            var that = this;
+                        }
+                        ,confirmTrans: function(){
+                            //配置一个透明的询问框
+                            layer.msg('内容不能为空', {
+                                time: 2000, //20s后自动关闭
+                            });
+                        }
+                    };
+                    active.confirmTrans();
+                });
+                return
             }
-        });
-    });
+            if(artId==""){
+                layui.use('layer', function(){ //独立版的layer无需执行这一句
+                    var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+                    //触发事件
+                    var active = {
+                        setTop: function(){
+                            var that = this;
+                        }
+                        ,confirmTrans: function(){
+                            //配置一个透明的询问框
+                            layer.msg('不存在此文章，请刷新重试！', {
+                                time: 2000, //20s后自动关闭
+                            });
+                        }
+                    };
+                    active.confirmTrans();
+                });
+                return
+            }
+
+            $.post("/article/reviseArticle.do",{"artId":artId,"artTitle":artTitle,"artTypeId":artTypeId,"artContent":artContent},function (res) {
+                if(res.artContent == "请登陆后重试"){
+                    layui.use('layer', function(){ //独立版的layer无需执行这一句
+                        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+                        //触发事件
+                        var active = {
+                            setTop: function(){
+                                var that = this;
+                            }
+                            ,confirmTrans: function(){
+                                //配置一个透明的询问框
+                                layer.msg('请登陆后重试', {
+                                    time: 2000, //20s后自动关闭
+                                });
+                            }
+                        };
+                        active.confirmTrans();
+                    });
+                    window.location.replace("/register_login.html");
+                }
+                if(res.artContent == "修改成功"){
+                    layui.use('layer', function(){ //独立版的layer无需执行这一句
+                        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+                        //触发事件
+                        var active = {
+                            setTop: function(){
+                                var that = this;
+                            }
+                            ,confirmTrans: function(){
+                                //配置一个透明的询问框
+                                layer.msg('修改成功', {
+                                    time: 2000, //20s后自动关闭
+                                });
+                            }
+                        };
+                        active.confirmTrans();
+                    });
+                    window.location.replace("/article/detailArticle.html?artId="+res.artId);
+                }
+            },"json")
+
+        }
+    }
+
 </script>
 
 <script>
@@ -230,8 +360,21 @@
         $("#artContent").removeAttr("readonly");
         $(e).parent().empty();
         var str = "<button type=\"button\" class=\"btn btn-success\" onclick=\"Cancle(this);\">取消</button>"
-        str +="<button type=\"submit\" class=\"btn btn-success\">提交</button>"
+        str += "<button type=\"button\" onclick=\"MySub()\" class=\"btn btn-success\">提交</button>"
         $("#myChang").append(str);
+
+        $("#editor").empty()
+
+        var editor = editormd("editor", {
+            height: 640,
+            imageUpload: true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: "/Index/uploadFile.do",
+            appendMarkdown: Myval,
+            path: "/static/editor/lib/"  // Autoload modules mode, codemirror, marked... dependents libs path
+
+
+        });
     }
 
     function Cancle(e) {
@@ -241,7 +384,33 @@
         $(e).parent().empty();
         $("#myChang").append("<button type=\"button\" class=\"btn btn-success\" onclick=\"Eidt(this);\">修改</button>\n" +
             "                    <button type=\"button\" class=\"btn btn-success\" onclick=\"Delete();\">删除</button>");
+
+        $("#editor").empty()
+
+        str = "<div id=\"markdown-view\">\n" +
+            "            <textarea style=\"display:none;\"  class=\"form-control\" id=\"artContent\" name=\"artContent\" cols=\"30\" rows=\"10\" placeholder=\"问题补充_\" readonly>"+Myval+"</textarea>\n" +
+            "        </div>"
+
+        $("#editor").append(str)
+
+        $(function() {
+            var testView = editormd.markdownToHTML("markdown-view", {
+                saveHTMLToTextarea : true,
+                height          : 640,
+                htmlDecode      : "style,script,iframe",
+                emoji           : true,
+                taskList        : true,
+                readOnly        : true,
+                tex             : true
+            });
+            Myval = testView.getMarkdown();
+
+        });
+
+        $("#editor").removeAttr("class").removeAttr("style")
+
     }
+
 </script>
 
 </body>

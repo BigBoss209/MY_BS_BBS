@@ -356,40 +356,36 @@
             $.post("/Index/getArticleInfo.do",function (res) {
                 for (let i = 0; i < res.length; i++) {
                     if(res[i].articleType.typeName == $("#rule_1 h3 a").text()){
-                        $("#rule_1 h3 a").attr("href","/profile/search.do?typeId="+res[i].articleType.typeId)
+                        $("#rule_1 h3 a").attr("href","/Index/search.html?typeId="+res[i].articleType.typeId)
                         $("#rule_1").append("帖子："+res[i].total+"<br>\n" +
                             "最后回复：<a href=\"javascript:;\"><span class=\"time\">"+getLocalTime(res[i].lastReply)+"</span></a>")
                     }
                     if(res[i].articleType.typeName == $("#rule_2 h3 a").text()){
-                        $("#rule_2 h3 a").attr("href","/profile/search.do?typeId="+res[i].articleType.typeId)
+                        $("#rule_2 h3 a").attr("href","/Index/search.html?typeId="+res[i].articleType.typeId)
                         $("#rule_2").append("帖子："+res[i].total+"<br>\n" +
                             "最后回复：<a href=\"javascript:;\"><span class=\"time\">"+getLocalTime(res[i].lastReply)+"</span></a>")
                     }
                     if(res[i].articleType.typeName == $("#exchange_1 h3 a").text()){
-                        $("#exchange_1 h3 a").attr("href","/profile/search.do?typeId="+res[i].articleType.typeId)
+                        $("#exchange_1 h3 a").attr("href","/Index/search.html?typeId="+res[i].articleType.typeId)
                         $("#exchange_1").append("帖子："+res[i].total+"<br>\n" +
                             "最后回复：<a href=\"javascript:;\"><span class=\"time\">"+getLocalTime(res[i].lastReply)+"</span></a>")
                     }
                     if(res[i].articleType.typeName == $("#exchange_2 h3 a").text()){
-                        $("#exchange_2 h3 a").attr("href","/profile/search.do?typeId="+res[i].articleType.typeId)
+                        $("#exchange_2 h3 a").attr("href","/Index/search.html?typeId="+res[i].articleType.typeId)
                         $("#exchange_2").append("帖子："+res[i].total+"<br>\n" +
                             "最后回复：<a href=\"javascript:;\"><span class=\"time\">"+getLocalTime(res[i].lastReply)+"</span></a>")
                     }
                     if(res[i].articleType.typeName == $("#dow_1 h3 a").text()){
-                        $("#dow_1 h3 a").attr("href","/profile/search.do?typeId="+res[i].articleType.typeId)
+                        $("#dow_1 h3 a").attr("href","/Index/search.html?typeId="+res[i].articleType.typeId)
                         $("#dow_1").append("帖子："+res[i].total+"<br>\n" +
                             "最后回复：<a href=\"javascript:;\"><span class=\"time\">"+getLocalTime(res[i].lastReply)+"</span></a>")
                     }
                     if(res[i].articleType.typeName == $("#dow_2 h3 a").text()){
-                        $("#dow_2 h3 a").attr("href","/profile/search.do?typeId="+res[i].articleType.typeId)
+                        $("#dow_2 h3 a").attr("href","/Index/search.html?typeId="+res[i].articleType.typeId)
                         $("#dow_2").append("帖子："+res[i].total+"<br>\n" +
                             "最后回复：<a href=\"javascript:;\"><span class=\"time\">"+getLocalTime(res[i].lastReply)+"</span></a>")
                     }
                 }
-
-                // for (let i = 0; i < res.length; i++) {
-                //     alert(res[i].articleType.typeName);
-                // }
             },"json")
         })
 

@@ -2,6 +2,7 @@ package com.example.boot1907.Service.impl;
 
 import com.example.boot1907.Service.IArticleService;
 import com.example.boot1907.bo.ArticleInfo;
+import com.example.boot1907.bo.Article_User_Info;
 import com.example.boot1907.dao.IArticleDao;
 import com.example.boot1907.pojo.Article;
 import com.example.boot1907.pojo.ArticleType;
@@ -67,6 +68,31 @@ public class ArticleServiceImpl implements IArticleService {
     @Override
     public Object searchByTypeId(int typeId) {
        return articleDao.searchByTypeId(typeId);
+    }
+//是否有此类型
+    @Override
+    public boolean isType(long typeId) {
+        if(articleDao.isType(typeId) != null ) return true;
+        return false;
+    }
+    //通过文章类型查找 并返回文章及作者信息
+    @Override
+    public void getArtilcleInfo(int typeId, List<Article_User_Info> articleUserInfoList,String selectType) {
+        List<Article_User_Info> getList = null;
+        if("selectByTime".equals(selectType)) getList = articleDao.getUserInfoByTypeTime(typeId);
+        if("selectByLike".equals(selectType)) getList = articleDao.getUserInfoByTypeLike(typeId);
+        if("selectByComm".equals(selectType)) getList = articleDao.getUserInfoByTypeComm(typeId);
+        if(getList != null){
+            for (int i = 0; i < getList.size(); i++) {
+                articleUserInfoList.add(getList.get(i));
+            }
+        }
+
+    }
+
+    @Override
+    public boolean isArt(Integer artId) {
+        return (articleDao.getArt(artId) == null?false:true);
     }
 
     @Override

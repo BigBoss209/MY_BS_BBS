@@ -6,5 +6,5 @@ package com.example.boot1907.Utils;
  * Description
  */
 public  class PageNumUtils {
-    public final static Integer ARTICLE_PAGENUM = 2;
+    public final static Integer ARTICLE_PAGENUM = 5;
 }
