@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="/static/js/jquery-2.1.1.min.js"></script>
+<body>
+ <a href="/redis/put.do">提交</a>
+ <button onclick="redis();">取值</button>
+<script>
+    function redis(){
+        $.get("/redis/get.do",function (res) {
+            alert(res);
+        },"text")
+    }
+</script>
+</body>
+</html>

@@ -7,6 +7,7 @@ import com.example.boot1907.dao.IArticleDao;
 import com.example.boot1907.pojo.Article;
 import com.example.boot1907.pojo.ArticleType;
 import com.example.boot1907.pojo.User;
+import com.example.boot1907.vo.ArticleAndType;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class ArticleServiceImpl implements IArticleService {
 
     //获取文章类型信息
     public List<ArticleType> getArticleType(){
-        ArrayList<ArticleType> articleList = (ArrayList) articleDao.getArticleType();
+        ArrayList<ArticleType> articleList = (ArrayList) articleDao.getAdminArtType();
         return articleList;
     }
 
@@ -95,6 +96,30 @@ public class ArticleServiceImpl implements IArticleService {
         return (articleDao.getArt(artId) == null?false:true);
     }
 
+//    通过关键字查询
+    @Override
+    public void searchByKeyWord(String keyword, List<Article_User_Info> articleUserInfoList, String selectType) {
+        List<Article_User_Info> getList = null;
+        if("selectByTime".equals(selectType)) getList = articleDao.getUserInfoByKWTime(keyword);
+        if("selectByLike".equals(selectType)) getList = articleDao.getUserInfoByKWpeLike(keyword);
+        if("selectByComm".equals(selectType)) getList = articleDao.getUserInfoByKWpeComm(keyword);
+        if(getList != null){
+            for (int i = 0; i < getList.size(); i++) {
+                articleUserInfoList.add(getList.get(i));
+            }
+        }
+    }
+
+    @Override
+    public void updatelikeInfo(Article art) {
+        articleDao.updatelikeInfo(art);
+    }
+
+    @Override
+    public Article searchByArtId(int artId) {
+        return articleDao.searchByArtId(artId);
+    }
+
     @Override
     public Object findOne(Object pojo) {
         return null;
@@ -121,4 +146,24 @@ public class ArticleServiceImpl implements IArticleService {
     }
 
 
+    public List<ArticleType> getAdminArtType() {
+        ArrayList<ArticleType> articleList = (ArrayList) articleDao.getAdminArtType();
+        return articleList;
+    }
+
+    public List<ArticleAndType> getNewContent() {
+        return articleDao.getNewContent();
+    }
+
+    public List<ArticleAndType> getNewReply() {
+        return articleDao.getNewReply();
+    }
+
+    public List<ArticleAndType> getMostLike() {
+        return articleDao.getMostLike();
+    }
+
+    public List<ArticleAndType> getMostReply() {
+        return articleDao.getMostReply();
+    }
 }

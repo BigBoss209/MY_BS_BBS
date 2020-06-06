@@ -30,6 +30,9 @@ public class GetPageNumController {
     public PageNum getPageNum(@RequestParam("pageName") String pageName, HttpServletRequest request){
         PageNum pageNum = new PageNum();
         Integer Num = null;
+
+//        if(request.getSession().getAttribute("userInfo") == null) return;
+
         if("questions".equals(pageName)){
             Integer count = articleService.getQuestionsNum((User)request.getSession().getAttribute("userInfo"));
             Num = count/ PageNumUtils.ARTICLE_PAGENUM ;

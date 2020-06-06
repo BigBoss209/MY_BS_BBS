@@ -1,0 +1,89 @@
+{
+    "code": 0,
+    "msg": "操作成功",
+    "data": [
+        {
+            "title": "会员管理",
+            "path": "",
+            "font": "layui-icon",
+            "icon": "&#xe66f;",
+            "spread": true,
+            "children": [
+                {
+                    "title": "用户列表",
+                    "path": "/admin/member/user.html",
+                    "font": "iconfont",
+                    "icon": "&#xe639;",
+                    "spread": false
+                },
+                {
+                    "title": "角色列表",
+                    "path": "/admin/member/role.html",
+                    "font": "iconfont",
+                    "icon": "&#xe645;",
+                    "spread": false
+                },
+                {
+                    "title": "权限列表",
+                    "path": "/admin/member/permission.html",
+                    "font": "iconfont",
+                    "icon": "&#xe640;",
+                    "spread": false
+                }
+            ]
+        },
+        {
+            "title": "常用页面",
+            "path": "",
+            "font": "layui-icon",
+            "icon": "&#xe672;",
+            "spread": false,
+            "children": [
+                {
+                    "title": "文章列表",
+                    "path": "/admin/often/article.html",
+                    "font": "layui-icon",
+                    "icon": "&#xe62e;",
+                    "spread": false
+                },
+                {
+                    "title": "留言列表",
+                    "path": "/admin/often/message.html",
+                    "font": "layui-icon",
+                    "icon": "&#xe62e;",
+                    "spread": false
+                }
+            ]
+        },
+        {
+            "title": "系统管理",
+            "path": "",
+            "font": "layui-icon",
+            "icon": "&#xe716;",
+            "spread": false,
+            "children": [
+                {
+                    "title": "网站配置",
+                    "path": "/admin/system/system-setting.html",
+                    "font": "iconfont",
+                    "icon": "&#xe61c;",
+                    "spread": false
+                },
+                {
+                    "title": "系统日志",
+                    "path": "/admin/system/system-log.html",
+                    "font": "iconfont",
+                    "icon": "&#xe614;",
+                    "spread": false
+                },
+                {
+                    "title": "屏蔽词",
+                    "path": "/admin/system/system-shield.html",
+                    "font": "iconfont",
+                    "icon": "&#xe641;",
+                    "spread": false
+                }
+            ]
+        }
+    ]
+}

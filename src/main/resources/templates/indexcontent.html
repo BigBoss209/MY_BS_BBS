@@ -29,9 +29,10 @@
         border-bottom: 2px #ededed solid;
         border-right: 1px #ccccd9 solid;
         float: left;
-        text-align: center;
         height: 30px;
         width: 22%;
+        text-align: left;
+        padding-left: 10px;
     }
     .new_topic_ul li a{
         color: #660000;
@@ -41,7 +42,6 @@
     }
     .new_topic_ul li:hover{
         border-bottom: 2px #99ccff solid;
-
     }
 
 </style>
@@ -87,6 +87,10 @@
                     margin-bottom: 5px;
                     margin-top: 2px;
                 }
+                .news_li li em a{
+                    color: #ff5500;
+                    margin-right: 5px;
+                }
                 #news_li_second{
                     display: none;
                 }
@@ -101,54 +105,20 @@
             <div class="news_li">
                  <div id="news_li_first">
                      <ul style="width: 100%">
-                         <li>1</li>
-                         <li>2</li>
-                         <li>3</li>
-                         <li>4</li>
-                         <li>5</li>
-                         <li>6</li>
-                         <li>6</li>
-                         <li>6</li>
-                         <li>6</li>
                      </ul>
                  </div>
                  <div id="news_li_second">
                      <ul style="width: 100%">
-                         <li>2</li>
-                         <li>2</li>
-                         <li>3</li>
-                         <li>4</li>
-                         <li>5</li>
-                         <li>6</li>
-                         <li>6</li>
-                         <li>6</li>
-                         <li>6</li>
                      </ul>
                  </div>
                  <div id="news_li_third">
                     <ul style="width: 100%">
-                        <li>3</li>
-                        <li>2</li>
-                        <li>3</li>
-                        <li>4</li>
-                        <li>5</li>
-                        <li>6</li>
-                        <li>6</li>
-                        <li>6</li>
-                        <li>6</li>
+
                     </ul>
                 </div>
                  <div id="news_li_fourth">
                     <ul style="width: 100%">
-                        <li>4</li>
-                        <li>2</li>
-                        <li>3</li>
-                        <li>4</li>
-                        <li>5</li>
-                        <li>6</li>
-                        <li>6</li>
-                        <li>6</li>
-                        <li>6</li>
+
                     </ul>
                 </div>
 
@@ -158,6 +128,54 @@
         <!--公告栏切换JS-->
         <script>
             $(function () {
+
+                $.post("/Index/getNewContent.do",function (res) {
+                    var str = "";
+                    for (let i = 0; i < res.length; i++) {
+                        str += " <li>\n" +
+                            "                    <em><a href=\"/Index/search.html?typeId="+res[i].typeId+"\" target=\"_blank\">["+res[i].typeName+"]</a></em>\n" +
+                            "                    <a href=\"/article/detailArticle.html?artId="+res[i].article.artId+"\" target=\"_blank\">"+res[i].article.artTitle+"</a>\n" +
+                            "                </li>"
+                    }
+                    $("#news_li_first ul").append(str)
+
+                },"json")
+                $.post("/Index/getNewReply.do",function (res) {
+                    var str = "";
+                    for (let i = 0; i < res.length; i++) {
+                        str += " <li>\n" +
+                            "                    <em><a href=\"/Index/search.html?typeId="+res[i].typeId+"\" target=\"_blank\">["+res[i].typeName+"]</a></em>\n" +
+                            "                    <a href=\"/article/detailArticle.html?artId="+res[i].article.artId+"\" target=\"_blank\">"+res[i].article.artTitle+"</a>\n" +
+                            "                </li>"
+                    }
+                    $("#news_li_second ul").append(str)
+
+                },"json")
+                $.post("/Index/getMostLike.do",function (res) {
+                    var str = "";
+                    for (let i = 0; i < res.length; i++) {
+                        str += " <li>\n" +
+                            "                    <em><a href=\"/Index/search.html?typeId="+res[i].typeId+"\" target=\"_blank\">["+res[i].typeName+"]</a></em>\n" +
+                            "                    <a href=\"/article/detailArticle.html?artId="+res[i].article.artId+"\" target=\"_blank\">"+res[i].article.artTitle+"</a>\n" +
+                            "                </li>"
+                    }
+                    $("#news_li_third ul").append(str)
+
+                },"json")
+                $.post("/Index/getMostReply.do",function (res) {
+                    var str = "";
+                    for (let i = 0; i < res.length; i++) {
+                        str += " <li>\n" +
+                            "                    <em><a href=\"/Index/search.html?typeId="+res[i].typeId+"\" target=\"_blank\">["+res[i].typeName+"]</a></em>\n" +
+                            "                    <a href=\"/article/detailArticle.html?artId="+res[i].article.artId+"\" target=\"_blank\">"+res[i].article.artTitle+"</a>\n" +
+                            "                </li>"
+                    }
+                    $("#news_li_fourth ul").append(str)
+
+                },"json")
+
+
+
                 $("#new_topic_li_second").hover(function () {
                     $("#news_li_first").css({hidden:"true",display:"none"});
                     $("#news_li_second").css({hidden:"false",display:"block"});
@@ -233,7 +251,6 @@
             }
             .topic_window_content{
                 clear: both;
-
             }
             .table_a{
                 display: block;
@@ -244,7 +261,6 @@
                 height: 80px !important;
             }
             .table_h3{
-
                 text-align: left;
                 width: calc(100% - 75px);
                 margin-left:82px ;
@@ -270,8 +286,6 @@
                                 <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/1.jpg" class="fl mr10"></a>
                                 <div class="table_h3" id="rule_1">
                                     <h3 class="fname"><a href="javascript:;">规章制度</a></h3>
-                                    <!--主题：5，帖子：335<br>-->
-                                    <!--最后回复：<a href="javascript:;"><span class="time">前天23:04</span></a>-->
                                 </div>
 
                             </th>
@@ -279,8 +293,7 @@
                                 <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/2.jpg" class="fl mr10"></a>
                                 <div class="table_h3" id="rule_2">
                                     <h3 class="fname"><a href="javascript:;">论坛公告</a></h3>
-                                    <!--主题：12，帖子：1556<br>-->
-                                    <!--最后回复：<a href="javascript:;"><span class="time">前天03:21</span></a>-->
+
                                 </div>
                             </th>
                         </tr>
@@ -300,8 +313,7 @@
                             <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/3.jpg" class="fl mr10"></a>
                             <div class="table_h3" id="exchange_1">
                                 <h3 class="fname"><a href="javascript:;">技术专区</a></h3>
-                                <!--主题：5，帖子：335<br>-->
-                                <!--最后回复：<a href="javascript:;"><span class="time">前天23:04</span></a>-->
+
                             </div>
 
                         </th>
@@ -309,8 +321,7 @@
                             <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/4.jpg" class="fl mr10"></a>
                             <div class="table_h3" id="exchange_2">
                                 <h3 class="fname"><a href="javascript:;">电影剧照</a></h3>
-                                <!--主题：12，帖子：1556<br>-->
-                                <!--最后回复：<a href="javascript:;"><span class="time">前天03:21</span></a>-->
+
                             </div>
                         </th>
                     </tr>
@@ -330,8 +341,7 @@
                             <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/5.jpg" class="fl mr10"></a>
                             <div class="table_h3" id="dow_1">
                                 <h3 class="fname"><a href="javascript:;">原创专区</a></h3>
-                                <!--主题：5，帖子：335<br>-->
-                                <!--最后回复：<a href="javascript:;"><span class="time">前天23:04</span></a>-->
+
                             </div>
 
                         </th>
@@ -339,8 +349,7 @@
                             <a class="table_a" href="javascript:;" target="_blank"><img alt="forumlogo" src="/static/imgs/topic_imgs/6.jpg" class="fl mr10"></a>
                             <div class="table_h3" id="dow_2">
                                 <h3 class="fname"><a href="javascript:;">高清原盘</a></h3>
-                                <!--主题：12，帖子：1556<br>-->
-                                <!--最后回复：<a href="javascript:;"><span class="time">前天03:21</span></a>-->
+
                             </div>
                         </th>
                     </tr>

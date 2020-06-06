@@ -9,10 +9,13 @@ import com.example.boot1907.pojo.Article;
 import com.example.boot1907.pojo.Comment;
 import com.example.boot1907.pojo.CommentMulti;
 import com.example.boot1907.pojo.User;
+import com.example.boot1907.vo.CommMulUser;
+import com.example.boot1907.vo.CommUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,5 +62,35 @@ public class CommentServiceImpl implements ICommentService {
     @Override
     public Integer addComm(Comment comment) {
         return commentDao.addComm(comment);
+    }
+
+    @Override
+    public ArrayList<CommUser> getAllComments(User userInfo) {
+        return commentDao.getAllComments(userInfo);
+    }
+
+    @Override
+    public ArrayList<CommMulUser> getAllCommentMultis(User userInfo) {
+        return commentMultiDao.getAllCommentMultis(userInfo);
+    }
+
+    @Override
+    public Long setWacthed(Long comId) {
+        return commentDao.setWacthed(comId);
+    }
+
+    @Override
+    public Long setWacthed(Long comId, Long comMultiId) {
+        return commentMultiDao.setWacthed(comMultiId);
+    }
+
+    @Override
+    public Long getArtId(Long comId) {
+        return commentDao.getArtId(comId);
+    }
+
+    @Override
+    public Long getArtId(Long comId, Long comMultiId) {
+        return commentMultiDao.getArtId(comId);
     }
 }

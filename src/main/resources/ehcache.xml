@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ehcache name="shiroCache">
     <!-- 序列化硬盘的存储目录 -->
-    <!--<diskStore path="d:/ehcache"/>-->
-    <diskStore path="/usr/local/ehcache"/>
+    <diskStore path="d:/ehcache"/>
+    <!--<diskStore path="/usr/local/ehcache"/>-->
     <!-- 
     	登录记录缓存 锁定30秒 
     	maxEntriesLocalHeap 内存缓存对象的个数

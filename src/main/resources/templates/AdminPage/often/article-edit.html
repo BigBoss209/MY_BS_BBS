@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>编辑文章</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/admin/css/okadmin.css">
+    <script src="/static/js/jquery-2.1.1.min.js" ></script>
+</head>
+<body>
+<div class="ok-body">
+    <!--面包屑导航区域-->
+    <div class="ok-body-breadcrumb">
+        <span class="layui-breadcrumb">
+            <a><cite>首页</cite></a>
+            <a><cite>常用页面</cite></a>
+            <a><cite>用户列表</cite></a>
+            <a><cite>编辑文章</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-sm" href="javascript:location.replace(location.href);" title="刷新">
+            <i class="layui-icon layui-icon-refresh"></i>
+        </a>
+    </div>
+    <!--form表单-->
+    <form class="layui-form ok-form" lay-filter="filter">
+        <input name="artId" type="hidden">
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-block">
+                <input type="text" name="artTitle" placeholder="请输入文章标题" autocomplete="off" class="layui-input" lay-verify="required|artTitleVerify">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">分类</label>
+            <div class="layui-input-block">
+                <select id="artTypeId" name="artTypeId">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="valid" value="1" title="启用" checked>
+                <input type="radio" name="valid" value="0" title="停用">
+            </div>
+        </div>
+
+        <link rel="stylesheet" href="/static/editor/css/editormd.min.css" />
+        <div class="form-group pol" id="editor">
+            <!--id="editor"   style="display: none" -->
+            <label for="artContent"  class="control-label">内容</label>
+            <textarea style="display: none"  class="form-control" id="artContent" name="artContent" cols="30" rows="10" placeholder="问题补充_"></textarea>
+        </div>
+
+        <script src="/static/editor/editormd.min.js"></script>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="edit">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!--js逻辑-->
+<script src="/static/admin/lib/layui/layui.js"></script>
+<script>
+    //获取数据
+    var initData;
+    function initDataForm(data) {
+        var jsonString = JSON.stringify(data)
+        initData = JSON.parse(jsonString);
+    }
+
+
+
+
+    function initForm() {
+        layui.use(["element", "form", "layedit", "okLayer", "okUtils"], function () {
+            var form = layui.form;
+            var layedit = layui.layedit;
+            var okLayer = layui.okLayer;
+            var okUtils = layui.okUtils;
+
+            $.ajaxSettings.async = false;
+            $.post("/article/getAdminArtType.do",function (res) {
+                var str = ""
+                $.each(res,function (i,item) {
+                    str += "<option value='"+item.typeId+"'>"+item.typeName+"</option>"
+                })
+                $("#artTypeId").append(str)
+            },"json")
+
+            form.val("filter", {
+                "artId":initData.artId,
+                "artTitle":initData.artTitle,
+                "artTypeId":initData.artTypeId,
+                "valid":initData.valid
+            });
+
+            var editor = editormd("editor", {
+                // width: "100%",
+                height: "500px",
+                markdown:initData.artContent,
+                imageUpload    : true,
+                imageFormats   : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                imageUploadURL : "/Index/uploadFile.do",
+                path : "/static/editor/lib/"  // Autoload modules mode, codemirror, marked... dependents libs path
+            });
+
+
+            var index = layedit.build("content", {});
+            form.verify({
+                // 标题校验
+                artTitleVerify: function(value, item){ //value：表单的值、item：表单的DOM对象
+                    if(!/^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{0,25}$/.test(value)){
+                        return '标题只含有汉字、数字、字母、下划线,并且不能以下划线开头和结尾';
+                    }
+                }
+            });
+
+            form.on("submit(edit)", function (data) {
+
+                var contet = editor.getMarkdown();
+
+                if(artContent==""){
+                    layui.use('layer', function(){ //独立版的layer无需执行这一句
+                        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+                        //触发事件
+                        var active = {
+                            setTop: function(){
+                                var that = this;
+                            }
+                            ,confirmTrans: function(){
+                                //配置一个透明的询问框
+                                layer.msg('内容不能为空', {
+                                    time: 2000, //20s后自动关闭
+                                });
+                            }
+                        };
+                        active.confirmTrans();
+                    });
+                    return
+                }
+
+                okUtils.ajax("/Admin/editArt.do", "post", data.field).done(function (response) {
+                    console.log(response)
+                    okLayer.msg.greenTick("编辑成功", function () {
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));
+                    });
+                }).fail(function (error) {
+                    console.log(error)
+                });
+                return false;
+            });
+        })
+    }
+</script>
+</body>
+</html>

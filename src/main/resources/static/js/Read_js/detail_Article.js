@@ -26,12 +26,16 @@ $(function () {
         }
         return null;
     }
+    
+    $.get("/redis/LikeGut.do",{"likedArtId":getQueryString("artId")},function(res){
+        $(".jieda-zan em").text(res)
+    },"text")
 
     // 请求评论列表数据
     $.post("/comm/searchCommByArtId.do",{"artId":getQueryString("artId")},function (res) {
         // alert(JSON.stringify(res.user))
 
-        //可以加上rediso
+        //可以加上redis
 
         //给文章基本信息赋值 (res.article.artContent)
         $("#markdown-textarea").val(res.article.artContent);
@@ -75,10 +79,6 @@ $(function () {
             "                    </div>\n" +
             "                    <div class=\"detail-body jieda-body photos\">"+res.commInfos[i].comment.comContent+"</div>\n" +
             "                    <div class=\"jieda-reply pull-right\">\n" +
-            "                        <span class=\"jieda-zan changColor\" type=\"zan\">\n" +
-            "                             <span class=\"glyphicon glyphicon-thumbs-up \" aria-hidden=\"true\"></span>\n" +
-            "                             <em>5</em>\n" +
-            "                        </span>\n" +
             "                        <span data-id='"+res.commInfos[i].comment.comId+"' class=\"changColor collapsed \" onclick='toggerReply(this);' type=\"reply \">\n" +
             "                            <span class=\"glyphicon glyphicon-comment\" aria-hidden=\"true\"></span>\n" +
             "                              <span>回复</span>\n" +
@@ -94,6 +94,37 @@ $(function () {
     },"json")
 
 })
+
+//点赞
+function likeput() {
+    var likedArtId = $(".detail-hits").attr("id")
+    $.get("/redis/LikePut.do",{"likedArtId":likedArtId},function(res){
+      console.log(res);
+      if (res.code != 200) {
+          layui.use('layer', function(){ //独立版的layer无需执行这一句
+              var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+              //触发事件
+              var active = {
+                  setTop: function(){
+                      var that = this;
+                  }
+                  ,confirmTrans: function(){
+                      //配置一个透明的询问框
+                      layer.msg(res.msg, {
+                          time: 2000, //20s后自动关闭
+                      });
+                  }
+              };
+              active.confirmTrans();
+          });
+          return
+      }
+      $.get("/redis/LikeGut.do",{"likedArtId":getQueryString("artId")},function(res){
+          $(".jieda-zan em").text(res)
+        },"text")
+    },"json")
+}
 
 //日期转换
 function getLocalTime(date) {

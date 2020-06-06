@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>welcome admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/static/admin/imgs/favicon.ico"/>
+    <link rel="stylesheet" href="/static/admin/css/okadmin.css">
+</head>
+<body>
+<div class="ok-body">
+    <blockquote class="layui-elem-quote">
+        欢迎管理员：<span class="x-red" th:text="${session.userInfo.userName}"></span>！当前时间: <span id="nowTime"></span> <span id="weekday"></span>
+    </blockquote>
+    <fieldset class="layui-elem-field">
+        <legend>数据统计</legend>
+        <div class="layui-row layui-col-space10 layui-row-margin">
+            <div class="layui-col-md2">
+                <div class="layui-bg-green md2-sub1">
+                    <i class="iconfont icon-dianliyonghuzongshu"></i>
+                </div>
+                <div class="md2-sub2">
+                    <span th:text="${session.adminInfo.userNum}"></span>
+                    <cite>用户总数</cite>
+                </div>
+            </div>
+            <div class="layui-col-md2">
+                <div class="layui-bg-blue md2-sub1">
+                    <i class="iconfont icon-wenzhang2"></i>
+                </div>
+                <div class="md2-sub2">
+                    <span th:text="${session.adminInfo.articleNum}"></span>
+                    <cite>文章总数</cite>
+                </div>
+            </div>
+            <div class="layui-col-md2">
+                <div class="layui-bg-black md2-sub1">
+                    <i class="iconfont icon-pinglun"></i>
+                </div>
+                <div class="md2-sub2">
+                    <span th:text="${session.adminInfo.commNum}"></span>
+                    <cite>评论总数</cite>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <blockquote class="layui-elem-quote">
+        系统基本参数
+    </blockquote>
+    <table class="layui-table">
+        <colgroup>
+            <col width="300">
+            <col>
+        </colgroup>
+        <tbody>
+        <tr>
+            <td>本机IP地址</td>
+            <td id="ipaddr"></td>
+        </tr>
+        <tr>
+            <td>服务器地址</td>
+            <td th:text="${session.adminInfo.IpAddr}"></td>
+        </tr>
+        <tr>
+            <td>操作系统</td>
+            <td>Redhat5</td>
+        </tr>
+        <tr>
+            <td>运行环境</td>
+            <td>JDK 1.8.0</td>
+        </tr>
+        <tr>
+            <td>数据库版本</td>
+            <td>Oracle Database 11g</td>
+        </tr>
+        <tr>
+            <td>最大上传限制</td>
+            <td>5M</td>
+        </tr>
+        <tr>
+            <td>当前用户权限</td>
+            <td>超级管理员</td>
+        </tr>
+        <tr>
+            <td>登录地</td>
+            <td id="addr"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <blockquote class="layui-elem-quote">
+        作者信息
+    </blockquote>
+    <table class="layui-table">
+        <colgroup>
+            <col width="300">
+            <col>
+        </colgroup>
+        <tbody>
+        <tr>
+            <td>开发者</td>
+            <td>ljm - <a href="mailto:2094585084@qq.com">2094585084@qq.com</a></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<!--js引入-->
+<script src="/static/admin/lib/layui/layui.js"></script>
+<script src="/static/js/jquery-2.1.1.min.js"></script>
+<!--获取本地信息-->
+<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+<script type="text/javascript">
+    $("#ipaddr").text(returnCitySN["cip"])
+    $("#addr").text(returnCitySN["cname"])
+</script>
+<!--js逻辑-->
+<script type="text/javascript">
+
+
+    layui.use("util", function () {
+        var util = layui.util;
+        util.fixbar({});
+    });
+
+    /**
+     * 初始化函数
+     */
+    setDate();
+
+    /**
+     * 获取当前时间
+     */
+    var nowDate1 = "";
+    function setDate() {
+        var date = new Date();
+        var year = date.getFullYear();
+        nowDate1 = year + "-" + addZero((date.getMonth() + 1)) + "-" + addZero(date.getDate()) + "  ";
+        nowDate1 += addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds());
+        document.getElementById("nowTime").innerHTML = nowDate1;
+        setTimeout('setDate()', 1000);
+    }
+
+    /**
+     * 年月日是分秒为10以下的数字则添加0字符串
+     * @param time
+     * @returns {number | *}
+     */
+    function addZero(time) {
+        var i = parseInt(time);
+        if (i / 10 < 1) {
+            i = "0" + i;
+        }
+        return i;
+    }
+
+    /**
+     * 初始化星期几
+     * @type {string}
+     */
+    var weekday = "星期" + "日一二三四五六".charAt(new Date().getDay());
+    document.getElementById("weekday").innerHTML = weekday;
+</script>
+</body>
+</html>

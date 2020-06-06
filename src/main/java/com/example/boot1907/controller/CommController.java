@@ -40,7 +40,6 @@ public class CommController {
         UserComm userComm = new UserComm();
         List<CommInfo> commInfos = commentService.getCommByArtId(artId);
         User user = commentService.getAutherByArtId(artId);
-        user.setSalt("");
         Article article = commentService.getArticleByArtId(artId);
         userComm.setCommInfos(commInfos);
         userComm.setUser(user);

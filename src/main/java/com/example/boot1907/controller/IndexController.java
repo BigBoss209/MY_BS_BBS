@@ -3,8 +3,14 @@ package com.example.boot1907.controller;
 import com.example.boot1907.Service.impl.ArticleServiceImpl;
 import com.example.boot1907.Utils.MyFileUtils;
 import com.example.boot1907.bo.ArticleInfo;
+import com.example.boot1907.pojo.Article;
 import com.example.boot1907.pojo.ArticleType;
+import com.example.boot1907.vo.AdminArt;
+import com.example.boot1907.vo.AdminArtInfo;
+import com.example.boot1907.vo.ArticleAndType;
 import com.example.boot1907.vo.MarkdownMsg;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -118,5 +124,38 @@ public class IndexController {
             markdownMsg.setMessage(UserInfo_msg);
             return markdownMsg;
         }
+    }
+
+    @RequestMapping("/getNewContent.do")
+    @ResponseBody
+    public List<ArticleAndType> getNewContent(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "6") int pageSize){
+        List<ArticleAndType> articleList = new ArrayList<>();
+        Page page = PageHelper.startPage(pageNum, pageSize, true);
+        articleList = articleService.getNewContent();
+        return articleList;
+    }
+    @RequestMapping("/getNewReply.do")
+    @ResponseBody
+    public List<ArticleAndType> getNewReply(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "6") int pageSize){
+        List<ArticleAndType> articleList = new ArrayList<>();
+        Page page = PageHelper.startPage(pageNum, pageSize, true);
+        articleList = articleService.getNewReply();
+        return articleList;
+    }
+    @RequestMapping("/getMostLike.do")
+    @ResponseBody
+    public List<ArticleAndType> getMostLike(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "6") int pageSize){
+        List<ArticleAndType> articleList = new ArrayList<>();
+        Page page = PageHelper.startPage(pageNum, pageSize, true);
+        articleList = articleService.getMostLike();
+        return articleList;
+    }
+    @RequestMapping("/getMostReply.do")
+    @ResponseBody
+    public List<ArticleAndType> getMostReply(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "6") int pageSize){
+        List<ArticleAndType> articleList = new ArrayList<>();
+        Page page = PageHelper.startPage(pageNum, pageSize, true);
+        articleList = articleService.getMostReply();
+        return articleList;
     }
 }

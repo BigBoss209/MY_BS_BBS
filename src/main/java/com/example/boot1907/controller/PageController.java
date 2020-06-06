@@ -24,7 +24,7 @@ public class PageController {
     public ModelAndView goArticlePage(@PathVariable("pageName") String pageName,@Param("artId") Long artId){
         ModelAndView modelAndView = new ModelAndView();
         if(artId == null){
-            modelAndView.setViewName("error.html");
+            modelAndView.setViewName("/error.html");
             modelAndView.addObject("message","文章类型错误");
             return modelAndView;
         }
@@ -32,4 +32,27 @@ public class PageController {
         return modelAndView;
     }
 
+    @RequestMapping("/search/AllSearch.html")
+    public ModelAndView goArticlePage(@Param("keyword") String keyword){
+        ModelAndView modelAndView = new ModelAndView();
+        if(keyword == null || "".equals(keyword)){
+            modelAndView.setViewName("/error.html");
+            modelAndView.addObject("message","查询错误");
+            return modelAndView;
+        }
+        modelAndView.setViewName("/com/AllSearch.html");
+        return modelAndView;
+    }
+
+    @RequestMapping("/admin/{dirName}/{pageName}.html")
+    public String goAdminPage(@PathVariable("dirName") String dirName,@PathVariable("pageName") String pageName){
+        String path = "/AdminPage/"+dirName+"/"+pageName+".html";
+        return path;
+    }
+
+    @RequestMapping("/admin/{pageName}.html")
+    public String goAdminIndexPage(@PathVariable("pageName") String pageName){
+        String path = "/AdminPage/"+pageName+".html";
+        return path;
+    }
 }

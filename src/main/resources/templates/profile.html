@@ -34,9 +34,23 @@
             height: 55px;
             width: 55px;
         }
+        .changColor{
+            background-color: #0099CC;
+        }
     </style>
 
     <script>
+
+        $(function () {
+            var pageName = $("#getPageName").text();
+            if(pageName == "questions"){
+                $("#re").removeClass()
+            }
+            if(pageName == "replys"){
+                $("#re").addClass()
+            }
+        })
+
         $(function () {
            var msg = $("title").text()
            var groupVal = $(".list-group a");
@@ -62,7 +76,80 @@
                     $(".pagination li:first-child").addClass("disabled")
                 },"json")
             }
-            if(pageName == "replys"){}
+            if(pageName == "replys"){
+                $.post("/profile/AJreplys.do",{"pageNum":1},function (res) {
+                    // alert(res.multipageInfo.size)
+                    var str = '';
+                    var mpt = "";
+                    var pt = "";
+                    var num = 0;
+                    var pnum = 0;
+                    var mnum = 0;
+                    var count = res.multipageInfo.size + res.pageInfo.size;
+                    for (let i = 0; i < count; ) {
+                        if(res.multipageInfo.size == 0){
+                            mpt = 0;
+                            pt = 1;
+                        }
+                        else if(res.pageInfo.size == 0){
+                            mpt = 1;
+                            pt = 0;
+                        }else {
+                            mpt = res.multipageInfo.list[mnum].commentMulti.comMultiTime;
+                            pt = res.pageInfo.list[pnum].comment.comTime;
+                        }
+
+
+                        if(mpt > pt ){
+                            num = mnum;
+                            str  += "<li data-id='"+res.multipageInfo.list[num].user.userId+"'>\n" +
+                                "                                <a>"+res.multipageInfo.list[num].user.userName+"</a>&nbsp;回复&nbsp;<a href=\"/profile/watchReplys.do?comId="+res.multipageInfo.list[num].commentMulti.comId+"&comMultiId="+res.multipageInfo.list[num].commentMulti.comMultiId+"\">"+res.multipageInfo.list[num].commentMulti.comMultiContent+"</a>\n" +
+                                "                                <span class=\"Myspan\">"+getLocalTime(mpt)+"</span>\n"
+                            if(res.multipageInfo.list[num].commentMulti.isread == "0"){
+                                str += "                                <span class=\"label label-danger\">未读</span>\n"
+                            } else {
+                                str += "                                <span class=\"label label-success\">已读</span>\n"
+                            }
+                            str +=  "                            </li>\n" +
+                                "                            <hr style=\"margin-left: 40px;\" class=\"layui-bg-gray\">"
+                            mnum++;
+                        }
+                        else {
+                            num = pnum;
+                            str  += "<li data-id='"+res.pageInfo.list[num].user.userId+"'>\n" +
+                                "                                <a>"+res.pageInfo.list[num].user.userName+"</a>&nbsp;回复&nbsp;<a href=\"/profile/watchReplys.do?comId="+res.pageInfo.list[num].comment.comId+"&comMultiId="+(-1)+"\">"+res.pageInfo.list[num].comment.comContent+"</a>\n" +
+                                "                                <span class=\"Myspan\">"+getLocalTime(pt)+"</span>\n"
+                            if(res.pageInfo.list[num].comment.isread == "0"){
+                                str += "                                <span class=\"label label-danger\">未读</span>\n"
+                            }else {
+                                str += "                                <span class=\"label label-success\">已读</span>\n"
+                            }
+                            str +=  "                            </li>\n" +
+                                "                            <hr style=\"margin-left: 40px;\" class=\"layui-bg-gray\">"
+                            pnum++;
+                        }
+
+                        i = mnum + pnum;
+
+                    }
+                    $("#replys ul").empty();
+                    $("#replys ul").append(str);
+
+                    var str = ''
+                    var size = count/res.pageInfo.pageSize;
+                    if(count - (size*res.pageInfo.pageSize) != 0) size++;
+                    for (let i = 0; i < size; i++) {
+                        if(i == 0){
+                            str+='<li class="active"><a href="#" onclick="myReClick(this);">'+(i+1)+'</a></li>'
+                        }else {
+                            str+='<li><a href="#" onclick="myReClick(this);">'+(i+1)+'</a></li>'
+                        }
+                    }
+                    $(".pagination li:first-child").after(str);
+                    $(".pagination li:first-child").addClass("disabled")
+
+                },"json")
+            }
 
 
 
@@ -112,8 +199,97 @@
                         "                        </div>\n" +
                         "                    </div>"
                 }
-               $(".media").remove();
-               $("#showWin").append(str);
+               $("#questions").empty();
+               $("#questions").append(str);
+
+            },"json")
+        };
+
+        function myClick(e){
+            $(".pagination li").removeClass("active");
+            $(".pagination li").removeClass("disabled");
+            $(e).parent().addClass("active")
+            var num = $(e).text();
+            var lastnum = $(".pagination li").eq(-2).text();
+            var firstnum = $(".pagination li").eq(1).text();
+            if(num == lastnum) $(".pagination li").eq(-1).addClass("disabled")
+            if(num == firstnum) $(".pagination li").eq(0).addClass("disabled")
+            //刷新列表
+            $.post("/profile/AJreplys.do",{"pageNum":num},function (res) {
+                // alert(res.multipageInfo.size)
+                var str = '';
+                var mpt = "";
+                var pt = "";
+                var num = 0;
+                var pnum = 0;
+                var mnum = 0;
+                var isread = 0;
+                var count = res.multipageInfo.size + res.pageInfo.size;
+                for (let i = 0; i < count; ) {
+                    if(res.multipageInfo.size == 0){
+                        mpt = 0;
+                        pt = 1;
+                    }
+                    else if(res.pageInfo.size == 0){
+                        mpt = 1;
+                        pt = 0;
+                    }else {
+                        mpt = res.multipageInfo.list[mnum].commentMulti.comMultiTime;
+                        pt = res.pageInfo.list[pnum].comment.comTime;
+                    }
+
+
+                    if(mpt > pt ){
+                        num = mnum;
+                        str  += "<li data-id='"+res.multipageInfo.list[num].user.userId+"'>\n" +
+                            "                                <a>"+res.multipageInfo.list[num].user.userName+"</a>&nbsp;回复&nbsp;<a href=\"/profile/watchReplys.do?comId="+res.multipageInfo.list[num].commentMulti.comId+"&comMultiId="+res.multipageInfo.list[num].commentMulti.comMultiId+"\">"+res.multipageInfo.list[num].commentMulti.comMultiContent+"</a>\n" +
+                            "                                <span class=\"Myspan\">"+getLocalTime(mpt)+"</span>\n"
+                        if(res.multipageInfo.list[num].commentMulti.isread == "0"){
+                            str += "                                <span class=\"label label-danger\">未读</span>\n"
+                            isread++;
+                        } else {
+                            str += "                                <span class=\"label label-success\">已读</span>\n"
+                        }
+                        str +=  "                            </li>\n" +
+                            "                            <hr style=\"margin-left: 40px;\" class=\"layui-bg-gray\">"
+                        mnum++;
+                    }
+                    else {
+                        num = pnum;
+                        str  += "<li data-id='"+res.pageInfo.list[num].user.userId+"'>\n" +
+                            "                                <a>"+res.pageInfo.list[num].user.userName+"</a>&nbsp;回复&nbsp;<a href=\"/profile/watchReplys.do?comId="+res.pageInfo.list[num].comment.comId+"&comMultiId="+(-1)+"\">"+res.pageInfo.list[num].comment.comContent+"</a>\n" +
+                            "                                <span class=\"Myspan\">"+getLocalTime(pt)+"</span>\n"
+                        if(res.pageInfo.list[num].comment.isread == "0"){
+                            str += "                                <span class=\"label label-danger\">未读</span>\n"
+                            isread++;
+                        }else {
+                            str += "                                <span class=\"label label-success\">已读</span>\n"
+                        }
+                        str +=  "                            </li>\n" +
+                            "                            <hr style=\"margin-left: 40px;\" class=\"layui-bg-gray\">"
+                        pnum++;
+                    }
+
+                    i = mnum + pnum;
+
+                }
+                $("#replys ul").empty();
+                $("#replys ul").append(str);
+
+                $(".badge").text(isread);
+
+                var str = ''
+                var size = count/res.pageInfo.pageSize;
+                if(count - (size*res.pageInfo.pageSize) != 0) size++;
+                for (let i = 0; i < size; i++) {
+                    if(i == 0){
+                        str+='<li class="active"><a href="#" onclick="myReClick(this);">'+(i+1)+'</a></li>'
+                    }else {
+                        str+='<li><a href="#" onclick="myReClick(this);">'+(i+1)+'</a></li>'
+                    }
+                }
+                $(".pagination li:first-child").after(str);
+                $(".pagination li:first-child").addClass("disabled")
 
             },"json")
         };
@@ -154,60 +330,100 @@
                 <h2><span id="my" th:text="${pageName}"></span></h2>
                 <hr/>
                 <!--展示数据-->
-                <div id="showWin" th:each="obj,listStatus : ${Mylist.list}">
-                    <div class="media">
-                        <div class="media-left media-middle ">
-                            <a href="#">
-                                <img class="media-object img-thumbnail myImg" th:src="${session.userInfo.userImg}" alt="\static\imgs\defult_img.jpg">
-                            </a>
-                        </div>
-                        <div class="media-body">
-                            <li>
+                <div>
+                    <div id="questions" th:if="${#strings.trim(page)=='questions'}">
+                        <div class="media" th:each="obj,listStatus : ${Mylist.list}">
+                            <div class="media-left media-middle ">
+                                <a href="#">
+                                  <!--<div th:if="${session.userInfo.userImg} == null">-->
+                                  <!--<img class="media-object img-thumbnail myImg" th:src="${session.userInfo.userImg}" alt="">-->
+                                <!--</div>-->
+                                  <!--<div th:if="${session.userInfo.userImg} == null">-->
+                                    <!--<img class="media-object img-thumbnail myImg" th:src="${session.userInfo.userImg}" alt="">-->
+                                  <!--</div>-->
+                                    <!--<img class="media-object img-thumbnail myImg" th:src="${session.userInfo.userImg}" alt="">-->
+                                    <img class="media-object img-thumbnail myImg" src="\static\imgs\defult_img.jpg" alt="">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <li>
                               <span>
                                 <a class="layui-badge layui-bg-blue">提问</a>
                               </span>
-                                <a th:href="@{'/article/changeArticle.do?artId='+${obj.artId}}" class="list-post-title" th:text="${obj.artTitle}"></a>
+                                    <a th:href="@{'/article/changeArticle.do?artId='+${obj.artId}}" class="list-post-title" th:text="${obj.artTitle}"></a>
 
-                                <div class="fly-list-info">
-                                    <a href="#" link="">
-                                        <cite th:text="${session.userInfo.userName}"></cite>
-                                    </a>
-                                    <span th:text="${#dates.format(obj.artCreTime,'yyyy-MM-dd')}"></span>
+                                    <div class="fly-list-info">
+                                        <a href="#" link="">
+                                            <cite th:text="${session.userInfo.userName}"></cite>
+                                        </a>
+                                        <span th:text="${#dates.format(obj.artCreTime,'yyyy-MM-dd')}"></span>
 
-                                    <span class="fly-list-nums">
+                                        <span class="fly-list-nums">
                                           <i class="layui-icon layui-icon-reply-fill" style="font-size: 20px;" title="回答"></i> <span th:text="${obj.artComNum}"></span>
                                 </span>
-                                </div>
-                                <div class="fly-list-badge">
+                                    </div>
+                                    <div class="fly-list-badge">
 
 
-                                </div>
-                            </li>
+                                    </div>
+                                </li>
+                            </div>
                         </div>
                     </div>
+                    <div id="replys" th:if="${#strings.trim(page)=='replys'}">
+                        <ul>
+
+                        </ul>
+                    </div>
+                    <style>
+                        #replys li{
+                            padding: 5px 0px;
+                            line-height: 35px;
+                            font-size: 18px;
+                            margin-left: 40px;
+                        }
+                        #replys li a{
+                            color: #337ab7;
+                            text-decoration: none;
+                        }
+                        #replys li a:hover{
+                            color: #2196f3;
+                        }
+                        .Myspan{
+                            float: right;
+                            margin-right: 5px;
+                        }
+                        .label{
+                            float: right;
+                            margin-top: 7px;
+                            margin-right: 5px;
+                        }
+                    </style>
                 </div>
 
                 <!--分页-->
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">
-                        <li>
-                            <a href="#" aria-label="Previous" onclick="preClick(this);">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
 
-                        <li>
-                            <a href="#" aria-label="Next" onclick="nextClick(this);">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+                 <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <li>
+                                <a href="#" aria-label="Previous" onclick="preClick(this);">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" aria-label="Next" onclick="nextClick(this);">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+
             </div>
             <div class="col-lg-3 col-md-12 col-sm-12">
                 <div class="list-group myStyle">
                     <a href="/profile/questions.do" class="list-group-item">我的问题</a>
-                    <a href="/profile/replys.do" class="list-group-item">我的回复</a>
+                    <a id="re" href="/profile/replys.do" class="list-group-item">我的回复 <span class="badge"></span></a>
                 </div>
             </div>
         </div>

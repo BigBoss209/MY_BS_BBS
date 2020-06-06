@@ -106,13 +106,39 @@
     </div>
     <div id ="search">
         <!--搜索框-->
-        <form action="/Allsearch.do" method="post">
+        <form method="get" action="/search/AllSearch.html">
             <div class="search">
-                <input type="text" style="padding-left: 5px" placeholder="  帖子标题" name="keyword" id="" value="" />
-                <button type="submit"><i>查询</i></button>
+                <input type="text" style="padding-left: 5px" placeholder=" 文章标题,作者" name="keyword" />
+                <button type="button" onclick="search();"><i>查询</i></button>
             </div>
         </form>
     </div>
+
+<script>
+    var  search = function() {
+        var keyword = $("#search input[name='keyword']").val();
+        if(keyword==""){
+            layui.use('layer', function(){ //独立版的layer无需执行这一句
+                var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+                //触发事件
+                var active = {
+                    setTop: function(){
+                        var that = this;
+                    }
+                    ,confirmTrans: function(){
+                        //配置一个透明的询问框
+                        layer.msg('查询不能为空', {
+                            time: 2000, //20s后自动关闭
+                        });
+                    }
+                };
+                active.confirmTrans();
+            });
+            return
+        }
+        $("#search form").submit();
+    }
+</script>
 
     <div style="width: 100%;height: 63px; background-color: deepskyblue"></div>
 

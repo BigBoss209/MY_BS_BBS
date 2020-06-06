@@ -1,6 +1,7 @@
 package com.example.boot1907.Service;
 
 import com.example.boot1907.pojo.User;
+import com.example.boot1907.vo.adminGetNum;
 
 
 /**
@@ -10,4 +11,7 @@ import com.example.boot1907.pojo.User;
  */
 public interface IUserService extends IService<User>{
 
+    adminGetNum getNumInfo();
+
+    void updateCon(String likedPostId);
 }

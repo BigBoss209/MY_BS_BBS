@@ -7,6 +7,7 @@ import com.example.boot1907.bo.regUser;
 import com.example.boot1907.dao.IUserDao;
 import com.example.boot1907.pojo.User;
 import com.example.boot1907.vo.RegMsg;
+import com.example.boot1907.vo.adminGetNum;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -33,16 +34,6 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-//    @RequestMapping("/list.html")
-//    public List<User> list() {
-//        return userDao.pageList();
-//    }
-//    @RequestMapping("/pageUser.html")
-//    public PageInfo<User> findUserWithPage(){
-//        List<User> users = userService.findUserWithPage(1, 3);
-//        PageInfo<User> pageInfo = new PageInfo<>(users);
-//        return pageInfo;
-//    }
     @ResponseBody
     @PostMapping("/register_findByName.do")
     public RegMsg FindByName(HttpServletRequest request, User user) {
@@ -52,7 +43,7 @@ public class UserController {
         request.getSession().setAttribute("token", token);//在服务器端保存
         String msg = "";
        User dbUser = userService.findOne(user);
-        //userService.save(user);
+//        userService.save(user);
         if(dbUser != null){
             System.out.println(dbUser);
             msg = "1";
@@ -76,7 +67,7 @@ public class UserController {
         }
         request.getSession().removeAttribute("token");//移除session中的token
 
-        if(UserCheck.checkName(reguser)&&UserCheck.checkPasswork(reguser)){
+        if(UserCheck.checkName(reguser.getUserName())&&UserCheck.checkPasswork(reguser.getPassWord())){
 //            System.out.println(reguser);
             //将bo转化为pojo
             User user = new User();
@@ -122,9 +113,11 @@ public class UserController {
         return false;
     }
 
-    @PostMapping("/login.do")
+//    @PostMapping("/login.do")
+    @GetMapping("/login.do")
     public ModelAndView login(User user, HttpServletRequest request,HttpSession httpSession) {
         ModelAndView mv = new ModelAndView();
+//        System.out.println(user);
         mv.setViewName("register_login");
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(), user.getUserPassword());
@@ -139,6 +132,11 @@ public class UserController {
                 User pojo = userService.findOne(user);
                 session.setAttribute("userInfo",pojo);
                 httpSession.setAttribute("userInfo",pojo);
+                if("1".equals(pojo.getIsadmin())){
+                    adminGetNum adminGetNums = userService.getNumInfo();
+                    session.setAttribute("adminInfo",adminGetNums);
+                    mv.setViewName("redirect:"+"/admin/index.html");
+                }
                 return mv;
             }
             String url = savedRequest.getRequestUrl();
@@ -159,6 +157,11 @@ public class UserController {
             HttpSession session = request.getSession();
             User pojo = userService.findOne(user);
             session.setAttribute("userInfo", pojo);
+            if("1".equals(pojo.getIsadmin())){
+                adminGetNum adminGetNums = userService.getNumInfo();
+                session.setAttribute("adminInfo",adminGetNums);
+                mv.setViewName("redirect:"+"/admin/index.html");
+            }
         }
         mv.addObject("msg", error);
         return mv;
@@ -171,5 +174,7 @@ public class UserController {
         modelAndView.setViewName("redirect:register_login.html");
         return modelAndView;
     }
+
+
 }
 

@@ -31,4 +31,10 @@ public interface IArticleService extends IService{
     void getArtilcleInfo(int typeId, List<Article_User_Info> articleUserInfoList,String selectType);
 
     boolean isArt(Integer artId);
+
+    void searchByKeyWord(String keyword, List<Article_User_Info> articleUserInfoList, String selectType);
+
+    void updatelikeInfo(Article art);
+
+    Article searchByArtId(int parseInt);
 }

@@ -33,6 +33,14 @@ public class ArticleController {
         List<ArticleType> articleTypeList = articleService.getArticleType();
         return articleTypeList;
     }
+
+    @PostMapping("/getAdminArtType.do")
+    @ResponseBody
+    public List<ArticleType> getAdminArtType(){
+        List<ArticleType> articleTypeList = articleService.getAdminArtType();
+        return articleTypeList;
+    }
+
 //发帖
     @PostMapping("/addArticle.do")
     @ResponseBody
@@ -100,7 +108,7 @@ public class ArticleController {
         ModelAndView modelAndView = new ModelAndView();
         //        还可以添加错误页面
         if(!articleService.isArt(artId)){
-            modelAndView.setViewName("error.html");
+            modelAndView.setViewName("/error.html");
             modelAndView.addObject("message","帖子查询错误，要不换个试试！！");
             return modelAndView;
         }

@@ -7,12 +7,12 @@ import java.util.Set;
 
 @Mapper
 public interface IUserDao {
-    @Insert("insert into bbs_user(user_id,user_name,user_password,salt,user_status,user_ex,user_fans,user_concern,isadmin,valid)" +
-            " values(seq_user.nextval,#{userName},#{userPassword},#{salt},1,0,0,0,0,1)")
+    @Insert("insert into bbs_user(user_id,user_name,user_password,salt,user_gender,user_status,user_ex,user_fans,user_concern,isadmin,valid)" +
+            " values(seq_user.nextval,#{userName},#{userPassword},#{salt},1,1,0,0,0,0,1)")
     void save(User user);
 
     //通过用户名查找用户
-    @Select("select * from BBS_user where user_name=#{userName}")
+    @Select("select * from BBS_user where user_name=#{userName} and valid = 1")
     @Results(id = "userMap", value = {
             @Result(property = "userId", column = "USER_ID"),
             @Result(property = "userName", column = "USER_NAME"),
@@ -38,7 +38,6 @@ public interface IUserDao {
     @ResultMap("userMap")
     List<User> pages(User pojo);
 
-
     class UserDaoProvider {
         public String pagesSql(User pojo) {
             StringBuilder sql = new StringBuilder("select * from BBS_user where 1 = 1 ");
@@ -52,7 +51,17 @@ public interface IUserDao {
             }
             return sql.toString();
         }
+
     }
+
+    @Select("select count(0) from bbs_user where isadmin = 0")
+    Integer getNum();
+
+    @Update("UPDATE bbs_user SET user_concern = user_concern + 1 WHERE user_id = #{userId}")
+    void updateCon(int userId);
+
+
+
 
     @Select("SELECT r.role_name FROM BBS_User u LEFT JOIN BBS_user_role ur\n" +
             "ON u.user_id = ur.user_id LEFT JOIN BBS_role r\n" +

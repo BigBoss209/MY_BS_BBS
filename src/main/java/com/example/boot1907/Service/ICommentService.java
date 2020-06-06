@@ -6,7 +6,11 @@ import com.example.boot1907.pojo.Article;
 import com.example.boot1907.pojo.Comment;
 import com.example.boot1907.pojo.CommentMulti;
 import com.example.boot1907.pojo.User;
+import com.example.boot1907.vo.CommMulUser;
+import com.example.boot1907.vo.CommUser;
+import org.apache.ibatis.annotations.Mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ICommentService{
@@ -22,4 +26,16 @@ public interface ICommentService{
     Integer addSeComm(CommentMulti commentMulti);
 
     Integer addComm(Comment comment);
+
+    ArrayList<CommUser> getAllComments(User userInfo);
+
+    ArrayList<CommMulUser> getAllCommentMultis(User userInfo);
+
+    Long setWacthed(Long comId);
+
+    Long setWacthed(Long comId,Long comMultiId);
+
+    Long getArtId(Long comId);
+
+    Long getArtId(Long comId,Long comMultiId);
 }

@@ -112,7 +112,8 @@ public class ShiroConfig {
      * @return sessionManager
      */
     @Bean
-    public SessionManager sessionManager(Cookie cookie, SessionValidationScheduler sessionValidationScheduler) {
+    public SessionManager sessionManager(Cookie cookie,
+                                         SessionValidationScheduler sessionValidationScheduler) {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         sessionManager.setSessionIdCookie(cookie);
         sessionManager.setGlobalSessionTimeout(1800000);
@@ -161,11 +162,11 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setLoginUrl("/login.html");
         shiroFilterFactoryBean.setSuccessUrl("/index.html");
         //权限不足跳转的页面
-        shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized.html");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/error.html");
         Map<String,String> map = new HashMap();
         //登出
 //        map.put("/login*","anon");
-//        map.put("/unauthorized*","anon");
+//        map.put("/register_login*","anon");
 //        map.put("/register*","anon");
 //        map.put("/error*","anon");
 //
@@ -173,10 +174,11 @@ public class ShiroConfig {
 //        map.put("/**.htm","anon");
 //
 //
-//        map.put("/logout","logout");
+//        map.put("/logout","anon");
 //        map.put("/**","authc");
 
         map.put("/**","anon");
+
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
         //shrio过滤器
